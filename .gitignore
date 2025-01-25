@@ -1,0 +1,15 @@
+# Visual Studio files
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+
+# Build output
+Debug/
+Release/
+*.obj
+*.pdb
+*.exe
+
+# Other temporary files
+*.log
+*.cache
