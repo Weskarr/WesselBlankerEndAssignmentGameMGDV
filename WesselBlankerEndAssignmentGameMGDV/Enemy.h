@@ -52,4 +52,3 @@ public:
 	// Rendering Functions (Public):
 	void render(sf::RenderTarget& target);
 };
-
