@@ -1,47 +1,38 @@
 
-#pragma region General
 /*
+    File Type: "Source"
     Made by: "Wessel Blanker"
     Started on: "06-12-2024"
-    About: "Learning basics of C++ by tutorial playlist & HKU Lessons called Math for GDV."
-
-    Sources:
-        > Extensive youtube playlist from: "Suraj Sharma"
-
-    Unknowns:
-        > Look into PreCompiled Headers?
-
-    Questions:
-        > What does main really - really mean ? Fixed Update or smth ?
-        > Why require a return at the end of main ? Bit weird..no ?
-        > Why do you need to dereference pointers?
+    About: "This is the Main Source File that drives the Game (Master)."
 */
-#pragma endregion
 
-#include <iostream> // No idea what this truly is yet..?
+// Included Header Files:
 #include "Game.h"
 
+
+
+// Main:
 int main()
 {
-    // Enable debug heap checks
+    // Enable Debug Incase of Memory Leaks.
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    // Init srand
+    // Initialize srand for Random Values Seed.
     std::srand(static_cast<unsigned>(time(NULL)));
 
-    // Init Game Master
+    // Initialize Game (Master).
     Game game;
 
-    // Game Loop
+    // Game Loop.
     while(game.running() && !game.getEndGame()) 
     {
-        // Update
+        // Update the Game (Master).
         game.update();
 
-        // Render
+        // Render the Game (Master).
         game.render();
     }
 
-    // End of Application
+    // End of Application.
     return 0; 
 }

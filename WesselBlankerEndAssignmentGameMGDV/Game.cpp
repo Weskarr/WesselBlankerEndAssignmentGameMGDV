@@ -1,12 +1,24 @@
 
+/*
+    File Type: "Source"
+    Made by: "Wessel Blanker"
+    Started on: "06-12-2024"
+    About: "This is kind of like my Game Master, with a few extras."
+*/
+
+// Included Header File:
 #include "Game.h"
 
+
+
 // -------------------------------------------------------------------------------
-// CONSTRUCTOR (Public)
+// CONSTRUCTOR
 // -------------------------------------------------------------------------------
 
+// (Public)
 Game::Game()
 {
+    // Initialize this.
     this->initVariables();
     this->initWindow();
     this->initFonts();
@@ -14,39 +26,49 @@ Game::Game()
 }
 
 // -------------------------------------------------------------------------------
-// DESTRUCTOR (Public)
+// DESTRUCTOR
 // -------------------------------------------------------------------------------
 
+// (Public)
 Game::~Game()
 {
-    delete this->window; // Otherwise big memory leak ???
+    // Delete this window.
+    delete this->window;
 }
 
 // -------------------------------------------------------------------------------
-// INITIAL (Private)
+// INITIAL
 // -------------------------------------------------------------------------------
 
+// (Private)
 void Game::initVariables()
 {
-    // Game Phases Related:
+    // Set Game Phases Related Variables:
     resetPhases();
     this->startingPhase = true;
 
-    // Game Related
-    this->window = nullptr;
+    // Set Main Related Variables:
     this->quitGame = false;
 
-    // Enemies Related
+    // Set Window Related Variables:
+    this->window = nullptr;
+
+    // Set Enemies Related Variables:
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimerCur = this->enemySpawnTimerMax;
     this->enemiesMax = 8;
 
-    // Hacking Related
+    // Set Orbs Related Variables:
+    this->orbSpawnTimerMax = 8.f;
+    this->orbSpawnTimerCur = this->orbSpawnTimerMax;
+    this->orbsMax = 100;
+
+    // Set Hacking Related Variables:
     this->hackingPointsMax = 1024;
     this->hackingPointsCur = 0;
     this->allDataHacked = false;
 
-    // Stealth Related
+    // Set Stealth Related Variables:
     this->stealthPercentageMax = 100.f;
     this->stealthPercentageCur = stealthPercentageMax;
     this->stealthRegenStart = 0.01f;
@@ -55,45 +77,50 @@ void Game::initVariables()
     this->stealthCooldownMax = 25.f;
     this->stealthCooldownCur = this->stealthCooldownMax;
     this->killSwitch = false;
-
-    // Orbs Related
-    this->orbSpawnTimerMax = 8.f;
-    this->orbSpawnTimerCur = this->orbSpawnTimerMax;
-    this->orbsMax = 100;
 }
 
+// (Private)
 void Game::initWindow()
 {
+    // Create the Window.
     this->videoMode.height = 700;
     this->videoMode.width = 800;
     this->window = new sf::RenderWindow(this->videoMode, "Game Window", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
 
-    this->spawnBorderRect.setSize(sf::Vector2f(this->window->getSize().x, 5.f));
-    this->spawnBorderRect.setPosition(sf::Vector2f(0.f, 100.f - spawnBorderRect.getSize().y));
-    this->spawnBorderRect.setFillColor(sf::Color(0, 255, 0, 50));
+    // Create the Border Visual.
+    this->playableAreaBorder.setSize(sf::Vector2f(static_cast<float>(this->window->getSize().x), 5.f));
+    this->playableAreaBorder.setPosition(sf::Vector2f(0.f, 100.f - playableAreaBorder.getSize().y));
+    this->playableAreaBorder.setFillColor(sf::Color(0, 255, 0, 50));
 }
 
+// (Private)
 void Game::initFonts()
 {
+    // Load the Font.
     if (!this->font.loadFromFile("Fonts/Roboto-Medium.ttf"))
     {
+        // Notify Console if Unable!
         std::cout << "[ERROR] Failed to Load a Font: " << "\n";
     }
 }
 
+// (Private)
 void Game::initText()
 {
+    // Status Text Setup.
     this->statusText.setFont(this->font);
     this->statusText.setCharacterSize(24);
     this->statusText.setFillColor(sf::Color::Green);
     this->statusText.setString("NONE");
 
+    // Start Text Setup.
     this->startText.setFont(this->font);
     this->startText.setCharacterSize(48);
     this->startText.setFillColor(sf::Color::Green);
     this->startText.setString("NONE");
 
+    // End Text Setup.
     this->endText.setFont(this->font);
     this->endText.setCharacterSize(48);
     this->endText.setFillColor(sf::Color::Green);
@@ -101,33 +128,41 @@ void Game::initText()
 }
 
 // -------------------------------------------------------------------------------
-// ACCESORS (Public)
+// ACCESORS
 // -------------------------------------------------------------------------------
 
+// (Public)
 const bool Game::running() const
 {
+    // Returns the Window IsOpen Status.
 	return this->window->isOpen();
 }
 
+// (Public)
 const bool Game::getEndGame() const
 {
+    // Returns the Quit Game Status.
     return this->quitGame;
 }
 
 // -------------------------------------------------------------------------------
-// POLL-EVENTS (Public)
+// POLL-EVENTS
 // -------------------------------------------------------------------------------
 
+// (Private)
 void Game::pollEvents()
 {
+    // Sort of Input Manager.
     while (this->window->pollEvent(this->ev)) {
         //Polling loop to check for events.
         switch (this->ev.type)
         {
         case sf::Event::Closed:
+            // Do this when the Window is Closed.
             this->window->close();
             break;
         case sf::Event::KeyPressed:
+            // Do this when the Escape is Pressed.
             if (ev.key.code == sf::Keyboard::Escape)
                 this->window->close();
             break;
@@ -136,59 +171,76 @@ void Game::pollEvents()
 }
 
 // -------------------------------------------------------------------------------
-// TIMED-EVENTS (Public)
+// TIMED-EVENTS
 // -------------------------------------------------------------------------------
 
+// (Private)
 void Game::spawnOrbsTimer()
 {
-    // Timer
+    // Only continue when not Max Orbs.
     if (this->orbs.size() < this->orbsMax)
     {
+        // Await Timer.
         if (this->orbSpawnTimerCur >= this->orbSpawnTimerMax)
         {
+            // Spawn New Orb.
             this->orbs.push_back(Orb(*this->window));
+
+            // Reset This Timer.
             this->orbSpawnTimerCur = 0.f;
         }
         else
         {
+            // Tick Time.
             this->orbSpawnTimerCur += 1.f;
         }
     }
 }
 
+// (Private)
 void Game::spawnEnemyTimer()
 {
-    // Timer
+    // Only continue when not Max Enemies.
     if (this->enemies.size() < this->enemiesMax)
     {
+        // Await Timer.
         if (this->enemySpawnTimerCur >= this->enemySpawnTimerMax)
         {
-            //std::cout << "[STATUS] Enemies Size: " << this->enemies.size();
+            // Spawn New Enemy.
             this->enemies.push_back(Enemy(*this->window));
+
+            // Reset This Timer.
             this->enemySpawnTimerCur = 0.f;
         }
         else
         {
+            // Tick Time.
             this->enemySpawnTimerCur += 1.f;
         }
     }
 }
 
+// (Private)
 void Game::stealthRegeneration()
 {
-    // Generate a Random Value that is Subtracted from the Current Stealth.
-
+    // Await Cooldown Timer.
     if (stealthCooldownCur >= stealthCooldownMax) 
     {
         if (this->stealthPercentageCur < 100.f)
         {
+            // Increase Multiplier
             this->stealthRegenMultiplier *= 1.01f;
+
+            // Notify Console of this change.
             std::cout << "Multiplier: " << stealthRegenMultiplier << "\n";
+
+            // Add the Stealth.
             this->stealthRegenCur = stealthRegenStart * stealthRegenMultiplier;
             this->stealthPercentageCur += stealthRegenCur;
         }
         else
         {
+            // Reset All Regeneration Variables if Max Stealth. 
             this->stealthRegenMultiplier = 1.f;
             this->stealthRegenCur = 0.f;
             this->stealthPercentageCur = 100.f;
@@ -197,108 +249,140 @@ void Game::stealthRegeneration()
     }
     else 
     {
+        // Tick Time.
         this->stealthCooldownCur += 1.f;
     }
 
 }
 
+// (Private)
 void Game::randomStealthModifier(bool isPositive, int minP, int maxP)
 {
     // Generate a Random Value that is Subtracted from the Current Stealth.
     float randomValue = static_cast<float>(rand() % ((maxP * 100) - (minP * 100)) + minP * 100) / 100.f;
+
+    // Notify Console of this (shortly upcoming) change.
     std::cout << "RandomValue of " << minP << " and " << maxP << " is: " << randomValue << "\n";
 
+    // Add or Subtract?
     if (isPositive) 
     {
+        // Add the Random Stealth Value.
         this->stealthPercentageCur += randomValue;
 
+        // Make sure not to exceed Max.
         if (this->stealthPercentageCur > 100.f) 
             this->stealthPercentageCur = 100.f;
-
     }
     else 
     {
+        // Subtract the Random Stealth Value.
         this->stealthPercentageCur -= randomValue;
 
+        // Reset Regeneration and Cooldown.
         this->stealthRegenMultiplier = 1.f;
         this->stealthRegenCur = 0.f;
         this->stealthCooldownCur = 0.f;
     }
 }
 
+// (Private)
 void Game::randomHackingCollected()
 {
     // Generate a Random Value that is Collected.
-    int randomValue = static_cast<float>(rand() % 1 + 3);
+    int randomValue = rand() % 1 + 3;
     this->hackingPointsCur += randomValue;
+
+    // Also Generate a Random Value of Stealth that is Lost.
     this->randomStealthModifier(false, 0, 1);
 }
 
 // -------------------------------------------------------------------------------
-// CONDITIONS (Public)
+// CONDITIONS
 // -------------------------------------------------------------------------------
 
-
+// (Private)
 void Game::stealthConditionCheck()
 {
     if (this->stealthPercentageCur <= 0)
     {
-        //this->quitGame = true;
+        // Enable Kill Switch Condition True = You lost!
         this->killSwitch = true;
-        std::cout << "[STATUS] End Game Condition Satisfied: " << "Killswitch!";
 
+        // Notify Console of this important development.
+        std::cout << "[STATUS] End Game Condition Satisfied: " << "Kill Switch!";
+
+        // Set Current Phase to Playing Phase.
         this->resetPhases();
         this->endingPhase = true;
     }
 }
 
+// (Private)
 void Game::hackingConditionCheck()
 {
     if (this->hackingPointsCur >= hackingPointsMax)
     {
-        //this->quitGame = true;
+        // Enable All Data Hacked Condition True = You won!
         this->allDataHacked = true;
+
+        // Notify Console of this important development.
         std::cout << "[STATUS] End Game Condition Satisfied: " << "All Data Hacked!";
 
+        // Set Current Phase to Ending Phase.
         this->resetPhases();
         this->endingPhase = true;
     }
 }
 
+// (Private)
 void Game::resetPhases()
 {
+    // Set all Phases False
     this->startingPhase = false;
     this->playingPhase = false;
     this->endingPhase = false;
 }
 
+// (Private)
 void Game::resetGame()
 {
+    // Reset End Conditions.
     killSwitch = false;
     allDataHacked = false;
 
+    // Clear all Orbs If Necessary.
     if (orbs.size() > 0)
         this->orbs.clear();
 
+    // Clear all Enemies If Necessary.
     if (enemies.size() > 0)
         this->enemies.clear();
 
+    // Reset Hacking Points If Necessary.
     if (hackingPointsCur != 0)
         hackingPointsCur = 0;
 
+    // Reset Stealth Percentage If Necessary.
     if (stealthPercentageCur != 100.f)
         stealthPercentageCur = 100.f;
 
+    // Start with Max Orbs.
     for (size_t i = 0; i < this->orbsMax; i++)
     {
         this->orbs.push_back(Orb(*this->window));
     }
+
+    // Set Current Phase to Playing Phase.
+    this->resetPhases();
+    this->playingPhase = true;
 }
 
 // -------------------------------------------------------------------------------
-// UPDATING (Public)
+// UPDATING
 // -------------------------------------------------------------------------------
 
+// (Public)
 void Game::update()
 {
     // Checks for Poll-Events.
@@ -309,10 +393,10 @@ void Game::update()
         // Updates are Dependant on the Current Phase.
         if (startingPhase) 
         {
-            // Update the Start Phase Text
+            // Update the Start Phase Text.
             this->updateStartPhaseText();
 
-            // Update the Possibility of Starting with Space Key
+            // Update the Possibility of Starting with Space Key.
             this->updatePlayKey();
         }
         else if (playingPhase)
@@ -326,7 +410,7 @@ void Game::update()
             // Timed Orb Spawner Update.
             this->spawnOrbsTimer();
 
-            // Update Enemies
+            // Update Enemies.
             for (auto& i : this->enemies)
                 i.update(this->window);
 
@@ -341,26 +425,27 @@ void Game::update()
         }
         else if (endingPhase) 
         {
-            // Update the End Phase Text
+            // Update the End Phase Text.
             this->updateEndPhaseText();
 
-            // Update the Possibility of Restarting with Space Key
+            // Update the Possibility of Restarting with Space Key.
             this->updatePlayKey();
         }
     }
 }
 
+// (Private)
 void Game::updatePlayKey()
 {
+    // If the Space Key is Pressed Continue.
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
+        // Resets the Game & Sets Playing Phase True.
         resetGame();
-
-        this->resetPhases();
-        this->playingPhase = true;
     }
 }
 
+// (Private)
 void Game::updateCollision()
 {
     // For Condition Check Afterwards.
@@ -373,7 +458,7 @@ void Game::updateCollision()
         // Conditional Bool for Removing the Current Orb.
         bool eraseOrbBool = false;
 
-        // Check for Player & Orb Collision
+        // Check for Player & Orb Collision.
         if (this->player.getShape().getGlobalBounds().intersects(
             this->orbs[i].getShape().getGlobalBounds()))
         {
@@ -397,7 +482,7 @@ void Game::updateCollision()
         // Conditional Bool for Removing the Current Enemy.
         bool eraseEnemyBool = false;
 
-        // Check for Player & Enemy Collision
+        // Check for Player & Enemy Collision.
         if (this->player.getShape().getGlobalBounds().intersects(
             this->enemies[i].getShape().getGlobalBounds()))
         {
@@ -408,7 +493,7 @@ void Game::updateCollision()
             checkStealthCondition = true;
             eraseEnemyBool = true;
         }
-        // Check if Hit Bottom
+        // Check if Hit Bottom.
         else if (this->enemies[i].getHitBottom()) 
         {
             // Gain a Random Amount of Stealth.
@@ -424,116 +509,136 @@ void Game::updateCollision()
             this->enemies.erase(this->enemies.begin() + i);
     }
 
-    // Condition for Stealth.
+    // Check Stealth Condition If Changed.
     if (checkStealthCondition)
         this->stealthConditionCheck();
 
-    // Condition for Hacking.
+    // Check Hacking Condition If Changed.
     if (checkHackingCondition)
         this->hackingConditionCheck();
 }
 
+// (Private)
 void Game::updateVariablesText()
 {
+    // Open String Stream.
     std::stringstream ss;
 
-    float progress = std::round(static_cast<float>(this->hackingPointsCur) / static_cast<float>(this->hackingPointsMax) * 100.f) / 10.0f;
-
+    // Add String Information to the String Stream.
     ss << std::fixed
         << std::setprecision(0) << "Data Hacked: " << "[ " << hackingPointsCur << " / " << hackingPointsMax << " GB ]" << "\n"
         << std::setprecision(1) << "Stealth: " << "[ " << stealthPercentageCur << "% ]";
 
+    // Finally Apply it to the Status Text.
     this->statusText.setString(ss.str());
 }
 
+// (Private)
 void Game::updateStartPhaseText()
 {
+    // Open String Stream.
     std::stringstream ss;
 
+    // Add String Information to the String Stream.
     ss << "PRESS SPACE TO START";
 
+    // Finally Apply it to the Start Text.
     this->startText.setString(ss.str());
 }
 
+// (Private)
 void Game::updateEndPhaseText()
 {
+    // Open String Stream.
     std::stringstream ss;
 
-    // if lost + reason
+    // if lost + reason.
     if (killSwitch == true) 
     {
+        // Add String Information to the String Stream.
         ss << "[LOST] Kill Switch Shutdown!";
     }
 
-    // if won + reason
+    // if won + reason.
     if (allDataHacked == true)
     {
+        // Add String Information to the String Stream.
         ss << "[WON] All Data is Hacked!";
     }
 
+    // Finally Apply it to the End Text.
     this->endText.setString(ss.str());
 }
 
 // -------------------------------------------------------------------------------
-// RENDERING (Public)
+// RENDERING
 // -------------------------------------------------------------------------------
 
+// (Public)
 void Game::render()
 {
-    // Clear the Window
+    // Clear the Window.
     this->window->clear(sf::Color(0, 20, 0));
    
-    // Draw Spawn Border
-    this->renderSpawnBorder(*this->window);
+    // Draw Spawn Border.
+    this->renderPlayableAreaBorder(*this->window);
 
-    // Draw Player
+    // Draw Player.
     this->player.render(this->window);
 
-    // Draw Orbs
-    for (auto i : this->orbs)
+    // Draw Orbs.
+    for (auto& i : this->orbs)
         i.render(*this->window);
 
-    // Draw Enemies
-    for (auto i : this->enemies)
+    // Draw Enemies.
+    for (auto& i : this->enemies)
         i.render(*this->window);
 
     // Render Depending on the Current Phase.
     if (startingPhase) 
     {
-        // Draw Start Phase Text
+        // Draw Start Phase Text.
         this->renderStartPhaseText(*this->window);
     }
     else if (playingPhase) 
     {
-        // Draw Variables (Score & Health)
+        // Draw Variables (Score & Health).
         this->renderVariablesText(*this->window);
     }
     else if (endingPhase) 
     {
-        // Draw End Phase Text
+        // Draw End Phase Text.
         this->renderEndPhaseText(*this->window);
     }
 
-    // Display All Renders
+    // Display All Renders.
     this->window->display();
 }
 
-void Game::renderSpawnBorder(sf::RenderTarget& target)
+// (Private)
+void Game::renderPlayableAreaBorder(sf::RenderTarget& target)
 {
-    target.draw(this->spawnBorderRect);
+    // Draw the Playable Area Border.
+    target.draw(this->playableAreaBorder);
 }
 
+// (Private)
 void Game::renderVariablesText(sf::RenderTarget& target)
 {
+    // Draw the Status Text.
     target.draw(this->statusText);
 }
 
+// (Private)
 void Game::renderStartPhaseText(sf::RenderTarget& target)
 {
+    // Draw the Start Text.
     target.draw(this->startText);
 }
 
+// (Private)
 void Game::renderEndPhaseText(sf::RenderTarget& target)
 {
+    // Draw the End Text.
     target.draw(this->endText);
 }

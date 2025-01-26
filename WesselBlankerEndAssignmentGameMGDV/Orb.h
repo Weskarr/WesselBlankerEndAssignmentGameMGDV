@@ -1,24 +1,38 @@
-#pragma once
 
-#include <SFML/Graphics.hpp> // No idea what this truly is yet..?
-#include <SFML/System.hpp> // No idea what this truly is yet..?
-#include <SFML/Window.hpp> // No idea what this truly is yet..?
-#include <SFML/Audio.hpp> // No idea what this truly is yet..?
-#include <SFML/Network.hpp> // No idea what this truly is yet..?
+/*
+	File Type: "Header"
+	Made by: "Wessel Blanker"
+	Started on: "08-12-2024"
+	About: "This is a collectable Data Orb that is hackable by the Player."
+*/
 
+// Included SFML Libraries:
+#include <SFML/Graphics.hpp>
+
+
+
+// Class:
 class Orb
 {
 private:
+
+	// Orb Visual Related:
 	sf::CircleShape shape;
 
+	// Initial Functions (Private):
 	void initShape(sf::RenderWindow& window);
 
 public:
+
+	// Constructor Functions (Public):
 	Orb(sf::RenderWindow& window);
+
+	// Destructor Functions (Public):
 	virtual ~Orb();
 
+	// Accessors Functions (Public):
 	const sf::CircleShape getShape() const;
 
-	void update();
+	// Rendering Functions (Public):
 	void render(sf::RenderTarget& target);
 };

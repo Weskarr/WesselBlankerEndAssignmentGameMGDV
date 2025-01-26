@@ -1,33 +1,50 @@
-#pragma once
 
-#include <SFML/Graphics.hpp> // No idea what this truly is yet..?
-#include <SFML/System.hpp> // No idea what this truly is yet..?
-#include <SFML/Window.hpp> // No idea what this truly is yet..?
-#include <SFML/Audio.hpp> // No idea what this truly is yet..?
-#include <SFML/Network.hpp> // No idea what this truly is yet..?
+/*
+	File Type: "Header"
+	Made by: "Wessel Blanker"
+	Started on: "07-12-2024"
+	About: "This is the Player itself, that dodges Enemies and collects hackable Data Orbs."
+*/
 
+// Included SFML Libraries:
+#include <SFML/Graphics.hpp> 
+
+
+
+// Class:
 class Player
 {
 private:
+
+	// Player Visual Related Variables:
 	sf::RectangleShape shape;
 
+	// Movement Related Variables:
 	float movementSpeed;
 
+	// Initial Functions (Private):
 	void initVariables();
 	void initShape();
 
+	// Updating Functions (Private):
+	void updateInput();
+	void updateWindowBoundsCollision(const sf::RenderTarget* target);
 
 public:
 
-	// Constructors & Destructors
+	// Constructor Functions (Public):
 	Player(float x = 350.f, float y = 400.f);
+
+	// Destructor Functions (Public):
 	virtual ~Player();
 
+	// Accessors Functions (Public):
 	const sf::RectangleShape getShape() const;
 
-	void updateInput();
-	void updateWindowBoundsCollision(const sf::RenderTarget* target);
+	// Updating Functions (Public):
 	void update(const sf::RenderTarget* target);
+
+	// Rendering Functions (Public):
 	void render(sf::RenderTarget* target);
 };
 
