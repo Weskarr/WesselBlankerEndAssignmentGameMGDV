@@ -95,15 +95,10 @@ void MathVector2::Print() const
 // -------------------------------------------------------------------------------
 
 // (Public)
-void MathVector2::setX(float newX)
+void MathVector2::setMathVector2(const MathVector2& newMathVector2)
 {
-	x = newX;
-}
-
-// (Public)
-void MathVector2::setY(float newY)
-{
-	y = newY;
+	x = newMathVector2.x;
+	y = newMathVector2.y;
 }
 
 // -------------------------------------------------------------------------------
@@ -111,14 +106,8 @@ void MathVector2::setY(float newY)
 // -------------------------------------------------------------------------------
 
 // (Public)
-float MathVector2::getX() const 
+MathVector2 MathVector2::GetMathVector2() const
 {
-	return x;
-}
-
-// (Public)
-float MathVector2::getY() const 
-{
-	return y;
+	return MathVector2(x, y);
 }
 

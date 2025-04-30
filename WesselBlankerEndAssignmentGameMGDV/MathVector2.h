@@ -47,12 +47,9 @@ public:
     void Print() const;
 
     // Setter Functions (Public):
-    void setX(float newX);
-    void setY(float newY);
+    void setMathVector2(const MathVector2& newMathVector2);
 
     // Getter Functions (Public):
-    float getX() const;
-    float getY() const;
-
+    MathVector2 GetMathVector2() const;
 };
 

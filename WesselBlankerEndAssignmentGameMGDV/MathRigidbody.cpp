@@ -38,16 +38,36 @@ MathRigidbody::~MathRigidbody()
 // ACCESORS
 // -------------------------------------------------------------------------------
 
-// Apply a force to the Rigidbody (change in acceleration)
+// (Public)
 void MathRigidbody::AddForce(const MathVector2& force) {
-    // For simplicity, we're assuming mass=1, so force = acceleration
-    acceleration = force;
+    // Apply a force to the Rigidbody (change in acceleration)
+    // Formula: F = ma, so acceleration = force / mass
+    acceleration = force / mass;
 }
 
-// Update the physics (position and velocity)
-void MathRigidbody::Update(float deltaTime) {
+// (Public)
+void MathRigidbody::Print() const
+{
+    // For debugging, print the position and velocity
+    std::cout << "Position: ";
+    position.Print();
+    std::cout << "Velocity: ";
+    velocity.Print();
+}
+
+// -------------------------------------------------------------------------------
+// UPDATING
+// -------------------------------------------------------------------------------
+
+// (Private)
+void MathRigidbody::Update(float deltaTime) 
+{
+    // Add gravity
+    MathVector2 gravityForce(0, -world->getGravity() * mass); // F = m * g
+    AddForce(gravityForce);
+
     // Apply friction to velocity (simple damping)
-    velocity = velocity * World.getFriction();
+    velocity = velocity * (1 - world->getFriction());
 
     // Update velocity based on acceleration
     velocity = velocity + (acceleration * deltaTime);
@@ -59,48 +79,58 @@ void MathRigidbody::Update(float deltaTime) {
     acceleration = MathVector2(0, 0);
 }
 
-// For debugging, print the position and velocity
-void MathRigidbody::Print() const {
-    std::cout << "Position: ";
-    position.Print();
-    std::cout << "Velocity: ";
-    velocity.Print();
-}
-
 // -------------------------------------------------------------------------------
 // SETTERS
 // -------------------------------------------------------------------------------
 
-MathVector2 MathRigidbody::getPosition() const 
+// (Public)
+void MathRigidbody::setPosition(const MathVector2& newPosition)
 {
-    return position;
+    position = newPosition;
 }
 
-MathVector2 MathRigidbody::getVelocity() const 
+// (Public)
+void MathRigidbody::setVelocity(const MathVector2& newVelocity)
 {
-    return velocity;
+    velocity = newVelocity;
 }
 
-MathVector2 MathRigidbody::getAcceleration() const 
+// (Public)
+void MathRigidbody::setAcceleration(const MathVector2& newAcceleration)
 {
-    return acceleration;
+    acceleration = newAcceleration;
+}
+
+// (Public)
+void MathRigidbody::setMass(float newMass)
+{
+    mass = newMass;
 }
 
 // -------------------------------------------------------------------------------
 // GETTERS
 // -------------------------------------------------------------------------------
 
-void MathRigidbody::setPosition(const MathVector2& newPosition) 
+// (Public)
+MathVector2 MathRigidbody::getPosition() const
 {
-    position = newPosition;
+    return position;
 }
 
-void MathRigidbody::setVelocity(const MathVector2& newVelocity) 
+// (Public)
+MathVector2 MathRigidbody::getVelocity() const
 {
-    velocity = newVelocity;
+    return velocity;
 }
 
-void MathRigidbody::setAcceleration(const MathVector2& newAcceleration) 
+// (Public)
+MathVector2 MathRigidbody::getAcceleration() const
 {
-    acceleration = newAcceleration;
+    return acceleration;
+}
+
+// (Public)
+float MathRigidbody::getMass() const
+{
+    return mass;
 }
