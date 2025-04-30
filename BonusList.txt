@@ -1,0 +1,10 @@
+1. Start-Up Screen.
+2. Fallout Minigame Aesthetic.
+3. Play Area Borders.
+4. Collectable Data Orbs.
+5. Stealth System.
+6. Vertical Movement.
+7. Escape to Quit.
+8. WASD Movement.
+9. SPACE to Start / Restart
+10. Game Balancing for a bit of Fun Factor.
