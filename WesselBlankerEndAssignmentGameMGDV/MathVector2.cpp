@@ -20,9 +20,6 @@
 // CONSTRUCTORS
 // -------------------------------------------------------------------------------
 
-// (Public) [DEFAULT]
-MathVector2::MathVector2() : x(0), y(0) {}
-
 // (Public) [CUSTOM]
 MathVector2::MathVector2(float x, float y) : x(x), y(y) {}
 
@@ -90,15 +87,28 @@ void MathVector2::Print() const
 	std::cout << "CustomVector2(" << x << ", " << y << ")\n";
 }
 
+sf::Vector2f MathVector2::ToSFML() const {
+	return sf::Vector2f(x, y);
+}
+
 // -------------------------------------------------------------------------------
 // SETTERS
 // -------------------------------------------------------------------------------
 
 // (Public)
-void MathVector2::setMathVector2(const MathVector2& newMathVector2)
+void MathVector2::SetMathVector2(const MathVector2& newMathVector2)
 {
 	x = newMathVector2.x;
 	y = newMathVector2.y;
+}
+
+void MathVector2::SetOnlyX(float newX)
+{
+	x = newX;
+}
+void MathVector2::SetOnlyY(float newY)
+{
+	y = newY;
 }
 
 // -------------------------------------------------------------------------------
@@ -111,3 +121,11 @@ MathVector2 MathVector2::GetMathVector2() const
 	return MathVector2(x, y);
 }
 
+float MathVector2::GetOnlyX() const
+{ 
+	return x; 
+}
+float MathVector2::GetOnlyY() const
+{ 
+	return y; 
+}

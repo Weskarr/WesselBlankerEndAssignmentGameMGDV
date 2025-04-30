@@ -1,3 +1,5 @@
 1. BonusList.txt & GithubUrl.txt are no longer empty.. [Stupidity]
-2. QuickPlayableBuild is no longer zipped in a zip folder.. [Weird]
-3. Added
+2. QuickPlayableBuild is no longer zipped inside an already zipped folder.. [Weird]
+3. Added #Pragma once to all headers to improve them more.. [Quality Improvement]
+
+> 4. Switched to using initializer list instead of separate initialization function.. [Quality Improvement]

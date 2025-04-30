@@ -50,6 +50,10 @@ Game::~Game()
 // (Private)
 void Game::initVariables()
 {
+    // Set the World if null:
+    if (!world)
+        world = new World();
+
     // Set Game Phases Related Variables:
     resetPhases();
     this->startingPhase = true;
@@ -66,7 +70,7 @@ void Game::initVariables()
     this->enemiesMax = 8;
 
     // Set Orbs Related Variables:
-    this->orbSpawnTimerMax = 8.f;
+    this->orbSpawnTimerMax = 8.0f;
     this->orbSpawnTimerCur = this->orbSpawnTimerMax;
     this->orbsMax = 100;
 
@@ -214,7 +218,7 @@ void Game::spawnEnemyTimer()
         if (this->enemySpawnTimerCur >= this->enemySpawnTimerMax)
         {
             // Spawn New Enemy.
-            this->enemies.push_back(Enemy(*this->window));
+            this->enemies.push_back(Enemy(*this->window, world));
 
             // Reset This Timer.
             this->enemySpawnTimerCur = 0.f;

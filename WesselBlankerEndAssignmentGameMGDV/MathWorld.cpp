@@ -20,8 +20,8 @@
 // CONSTRUCTORS
 // -------------------------------------------------------------------------------
 
-// (Public) [CUSTOM]
-World::World(float friction = 0.1f, float gravity = 9.8f, float timeStep = 1.0f) 
+// (Public)
+World::World(float friction, float gravity, float timeStep)
 	: friction(friction), gravity(gravity), timeStep(timeStep) {
 }
 
@@ -40,19 +40,19 @@ World::~World()
 // -------------------------------------------------------------------------------
 
 // (Public)
-void World::setFriction(float newFriction)
+void World::SetFriction(float newFriction)
 {
 	friction = newFriction;
 }
 
 // (Public)
-void World::setGravity(float newGravity)
+void World::SetGravity(float newGravity)
 {
 	gravity = newGravity;
 }
 
 // (Public)
-void World::setTimeStep(float newTimeStep)
+void World::SetTimeStep(float newTimeStep)
 {
 	timeStep = newTimeStep;
 }
@@ -62,19 +62,19 @@ void World::setTimeStep(float newTimeStep)
 // -------------------------------------------------------------------------------
 
 // (Public)
-float World::getFriction() const
+float World::GetFriction() const
 {
 	return friction;
 }
 
-// (Public)
-float World::getGravity() const
+// (Public) 
+float World::GetGravity() const
 {
 	return gravity;
 }
 
 // (Public)
-float World::getTimeStep() const
+float World::GetTimeStep() const
 {
 	return timeStep;
 }

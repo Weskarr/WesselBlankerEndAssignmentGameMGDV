@@ -17,13 +17,13 @@
 #include "Enemy.h"
 
 
-
 // -------------------------------------------------------------------------------
 // CONSTRUCTOR
 // -------------------------------------------------------------------------------
 
 // (Public)
-Enemy::Enemy(sf::RenderWindow& window)
+Enemy::Enemy(sf::RenderWindow& window, World* world)
+	: rigidbody(world), world(world)
 {
 	// Initialize this.
 	this->initShape(window);
@@ -49,9 +49,14 @@ void Enemy::initVariables()
 {
 	// Set Movement Related Variables:
 	this->hitBottom = false;
+
+	// Set initial velocity
 	float velX = static_cast<float>(rand() % (2 * 200 + 1) - 200) / 100;
 	float velY = static_cast<float>(rand() % 100 + 75) / 100;
-	this->velocity = sf::Vector2f(velX, velY);
+	rigidbody.SetVelocity(MathVector2(velX, velY));
+	rigidbody.SetPosition(MathVector2(this->shape.getPosition().x, this->shape.getPosition().y));
+	//rigidbody.SetPosition(MathVector2(220, 220));
+	rigidbody.SetMass(1.0f);
 }
 
 // (Private)
@@ -115,8 +120,11 @@ void Enemy::update(const sf::RenderTarget* target)
 // (Private)
 void Enemy::updateMovement()
 {
-	// Move Enemy Shape.
-	this->shape.move(velocity.x, velocity.y);
+	rigidbody.Update(world->GetTimeStep());
+
+	// Apply updated position to shape
+	MathVector2 pos = rigidbody.GetPosition();
+	this->shape.setPosition(pos.ToSFML());
 }
 
 // (Private)
@@ -125,14 +133,20 @@ void Enemy::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	// Left Side Bounce & Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left <= 0.f) 
 	{
-		this->velocity.x *= -1;
+		//this->velocity.x *= -1;
+		MathVector2 velocity = rigidbody.GetVelocity();
+		MathVector2 newVelocity(-velocity.GetMathVector2().GetOnlyX(), velocity.GetMathVector2().GetOnlyY());
+		rigidbody.SetVelocity(newVelocity);
 		this->shape.setPosition(0.f, this->shape.getGlobalBounds().top);
 	}
 
 	// Right Side Bounce & Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x) 
 	{
-		this->velocity.x *= -1;
+		//this->velocity.x *= -1;
+		MathVector2 velocity = rigidbody.GetVelocity();
+		MathVector2 newVelocity(-velocity.GetMathVector2().GetOnlyX(), velocity.GetMathVector2().GetOnlyY());
+		rigidbody.SetVelocity(newVelocity);
 		this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top);
 	}
 

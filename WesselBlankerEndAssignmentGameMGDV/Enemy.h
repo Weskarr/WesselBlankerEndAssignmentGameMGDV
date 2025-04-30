@@ -15,7 +15,8 @@
 // Included SFML Libraries:
 #include <SFML/Graphics.hpp>
 
-
+// Included Header Files:
+#include "MathRigidbody.h"
 
 // Class:
 class Enemy
@@ -25,8 +26,11 @@ private:
 	// Enemy Visual Related Variables:
 	sf::CircleShape shape;
 
+	// Pointer to the World object
+	World* world;
+
 	// Movement Related Variables:
-	sf::Vector2f velocity;
+	MathRigidbody rigidbody;
 	bool hitBottom;
 
 	// Initial Functions (Private):
@@ -40,7 +44,7 @@ private:
 public:
 
 	// Constructor Functions (Public):
-	Enemy(sf::RenderWindow& window);
+	Enemy(sf::RenderWindow& window, World* world);
 
 	// Destructor Functions (Public):
 	virtual ~Enemy();

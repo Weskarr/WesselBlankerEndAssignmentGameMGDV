@@ -17,6 +17,7 @@
 // Included Standard Libraries:
 #include <cmath>
 #include <iostream>
+#include <SFML/System/Vector2.hpp>
 
 
 
@@ -31,8 +32,7 @@ private:
 public:
 
     // Constructor Functions (Public):
-    MathVector2(); // [DEFAULT]
-    MathVector2(float x, float y); // [CUSTOM]
+    MathVector2(float x, float y);
 
     // Destructor Functions (Public):
     virtual ~MathVector2();
@@ -45,11 +45,16 @@ public:
     float Magnitude() const;
     MathVector2 Normalized() const;
     void Print() const;
+    sf::Vector2f ToSFML() const;
 
     // Setter Functions (Public):
-    void setMathVector2(const MathVector2& newMathVector2);
+    void SetMathVector2(const MathVector2& newMathVector2);
+    void SetOnlyX(float newX);
+    void SetOnlyY(float newY);
 
     // Getter Functions (Public):
     MathVector2 GetMathVector2() const;
+    float GetOnlyX() const;
+    float GetOnlyY() const;
 };
 

@@ -21,8 +21,12 @@
 // -------------------------------------------------------------------------------
 
 // (Public)
-MathRigidbody::MathRigidbody(World* world) 
-    : world(world), position(0, 0), velocity(0, 0), acceleration(0, 0) {
+MathRigidbody::MathRigidbody(World* world,
+    MathVector2 position,
+    MathVector2 velocity,
+    MathVector2 acceleration,
+    float mass)
+    : world(world), position(position), velocity(velocity), acceleration(acceleration), mass(mass) {
 }
 
 // -------------------------------------------------------------------------------
@@ -62,17 +66,22 @@ void MathRigidbody::Print() const
 // (Private)
 void MathRigidbody::Update(float deltaTime) 
 {
-    // Add gravity
-    MathVector2 gravityForce(0, -world->getGravity() * mass); // F = m * g
+    if (!world) {
+        std::cerr << "Error: Rigidbody world is nullptr.\n";
+        return;
+    }
+
+    // Add gravity force: m * g
+    MathVector2 gravityForce(0, mass * world->GetGravity()); // no need to multiply by deltaTime
     AddForce(gravityForce);
 
-    // Apply friction to velocity (simple damping)
-    velocity = velocity * (1 - world->getFriction());
+    // Apply friction: simple damping, using velocity directly (no timeStep needed here)
+    velocity = velocity * (1.0f - world->GetFriction());
 
-    // Update velocity based on acceleration
+    // Update velocity based on acceleration (using the time step already passed)
     velocity = velocity + (acceleration * deltaTime);
 
-    // Update position based on velocity
+    // Update position based on velocity (using deltaTime for proper integration)
     position = position + (velocity * deltaTime);
 
     // Reset acceleration after each update
@@ -84,25 +93,25 @@ void MathRigidbody::Update(float deltaTime)
 // -------------------------------------------------------------------------------
 
 // (Public)
-void MathRigidbody::setPosition(const MathVector2& newPosition)
+void MathRigidbody::SetPosition(const MathVector2& newPosition)
 {
     position = newPosition;
 }
 
 // (Public)
-void MathRigidbody::setVelocity(const MathVector2& newVelocity)
+void MathRigidbody::SetVelocity(const MathVector2& newVelocity)
 {
     velocity = newVelocity;
 }
 
 // (Public)
-void MathRigidbody::setAcceleration(const MathVector2& newAcceleration)
+void MathRigidbody::SetAcceleration(const MathVector2& newAcceleration)
 {
     acceleration = newAcceleration;
 }
 
 // (Public)
-void MathRigidbody::setMass(float newMass)
+void MathRigidbody::SetMass(float newMass)
 {
     mass = newMass;
 }
@@ -112,25 +121,25 @@ void MathRigidbody::setMass(float newMass)
 // -------------------------------------------------------------------------------
 
 // (Public)
-MathVector2 MathRigidbody::getPosition() const
+MathVector2 MathRigidbody::GetPosition() const
 {
     return position;
 }
 
 // (Public)
-MathVector2 MathRigidbody::getVelocity() const
+MathVector2 MathRigidbody::GetVelocity() const
 {
     return velocity;
 }
 
 // (Public)
-MathVector2 MathRigidbody::getAcceleration() const
+MathVector2 MathRigidbody::GetAcceleration() const
 {
     return acceleration;
 }
 
 // (Public)
-float MathRigidbody::getMass() const
+float MathRigidbody::GetMass() const
 {
     return mass;
 }

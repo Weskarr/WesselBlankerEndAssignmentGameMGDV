@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Orb.h"
+#include "MathWorld.h"
 
 
 
@@ -76,6 +77,9 @@ private:
 
 	// Playable Area Related Variables:
 	sf::RectangleShape playableAreaBorder;
+
+	// Pointer to the World object
+	World* world;
 
 	// Initial Functions (Private):
 	void initVariables();

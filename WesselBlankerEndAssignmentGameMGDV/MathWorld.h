@@ -29,21 +29,19 @@ private:
 public:
 
     // Constructor Functions (Public):
-    World(float friction = 0.1f, float gravity = 9.8f, float timeStep = 1.0f)
-        : friction(friction), gravity(gravity), timeStep(timeStep) {
-    }
+    World(float friction = 1.0f / 1500, float gravity = 9.8f / 3000, float timeStep = 1.0f);
 
     // Destructor Functions (Public):
     virtual ~World();
 
     // Setter Functions (Public):
-    void setFriction(float newFriction);
-    void setGravity(float newGravity);
-    void setTimeStep(float newTimeStep);
+    void SetFriction(float newFriction);
+    void SetGravity(float newGravity);
+    void SetTimeStep(float newTimeStep);
 
     // Getter Functions (Public):
-    float getFriction() const;
-    float getGravity() const;
-    float getTimeStep() const;
+    float GetFriction() const;
+    float GetGravity() const;
+    float GetTimeStep() const;
 
 };
