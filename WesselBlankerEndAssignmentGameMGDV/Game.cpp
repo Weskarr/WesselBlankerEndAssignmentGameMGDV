@@ -6,6 +6,13 @@
     About: "This is kind of like my Game Master, with a few extras."
 */
 
+/*
+    Second Iteration Changes:
+    1.
+    2.
+    3.
+*/
+
 // Included Header File:
 #include "Game.h"
 

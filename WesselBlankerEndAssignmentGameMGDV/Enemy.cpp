@@ -6,6 +6,13 @@
 	About: "Is a Enemy that acts like some kind of Anti-Virus, randomly attempting to stop the Player."
 */
 
+/*
+	Second Iteration Changes:
+	1.
+	2.
+	3.
+*/
+
 // Included Header File:
 #include "Enemy.h"
 

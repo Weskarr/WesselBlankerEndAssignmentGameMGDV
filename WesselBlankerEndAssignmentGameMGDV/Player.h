@@ -6,6 +6,9 @@
 	About: "This is the Player itself, that dodges Enemies and collects hackable Data Orbs."
 */
 
+// Single Safety:
+#pragma once
+
 // Included SFML Libraries:
 #include <SFML/Graphics.hpp> 
 

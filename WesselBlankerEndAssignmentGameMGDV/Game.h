@@ -6,6 +6,9 @@
 	About: "This is kind of like my Game Master, with a few extras."
 */
 
+// Single Safety:
+#pragma once
+
 // Included Standard Libraries:
 #include <iomanip>
 #include <sstream>

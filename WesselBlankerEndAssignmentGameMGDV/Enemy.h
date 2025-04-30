@@ -6,6 +6,9 @@
 	About: "Is a Enemy that acts like some kind of Anti-Virus, attempting to stop the Player."
 */
 
+// Single Safety:
+#pragma once
+
 // Included Standard Libraries:
 #include <iostream>
 

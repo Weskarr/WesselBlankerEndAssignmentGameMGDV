@@ -6,6 +6,9 @@
 	About: "This is a collectable Data Orb that is hackable by the Player."
 */
 
+// Single Safety:
+#pragma once
+
 // Included SFML Libraries:
 #include <SFML/Graphics.hpp>
 

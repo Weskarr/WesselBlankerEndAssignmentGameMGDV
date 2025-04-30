@@ -6,6 +6,13 @@
 	About: "This is a collectable Data Orb that is hackable by the Player."
 */
 
+/*
+	Second Iteration Changes:
+	1.
+	2.
+	3.
+*/
+
 // Included Header File:
 #include "Orb.h"
 

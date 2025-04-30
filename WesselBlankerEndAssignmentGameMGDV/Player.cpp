@@ -6,6 +6,13 @@
 	About: "This is the Player itself, that dodges Enemies and collects hackable Data Orbs."	
 */
 
+/*
+	Second Iteration Changes:
+	1.
+	2.
+	3.
+*/
+
 // Included Header File:
 #include "Player.h"
 
