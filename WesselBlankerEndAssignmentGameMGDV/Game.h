@@ -34,9 +34,6 @@ private:
 	// Main Related Variables:
 	bool quitGame; // For Quitting the Game.
 
-	// Player Related Variables:
-	Player player;
-
 	// Enemies Related Variables:
 	std::vector<Enemy> enemies;
 	float enemySpawnTimerMax;
@@ -80,6 +77,9 @@ private:
 
 	// Pointer to the World object
 	World* world;
+
+	// Player Related Variables:
+	Player* player;
 
 	// Initial Functions (Private):
 	void initVariables();

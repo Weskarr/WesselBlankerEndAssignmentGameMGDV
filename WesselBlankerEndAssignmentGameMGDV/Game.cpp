@@ -40,6 +40,8 @@ Game::Game()
 Game::~Game()
 {
     // Delete this window.
+    delete this->player;
+    delete this->world;
     delete this->window;
 }
 
@@ -51,8 +53,8 @@ Game::~Game()
 void Game::initVariables()
 {
     // Set the World if null:
-    if (!world)
-        world = new World();
+    if (!this->world)
+        this->world = new World();
 
     // Set Game Phases Related Variables:
     resetPhases();
@@ -88,6 +90,13 @@ void Game::initVariables()
     this->stealthCooldownMax = 25.f;
     this->stealthCooldownCur = this->stealthCooldownMax;
     this->killSwitch = false;
+
+    // Apply World to Player:
+    if (!this->player)
+    {
+        this->player = new Player(350.f, 400.f, this->world);
+        this->player->SetNewFillTransparency(stealthPercentageCur);
+    }
 }
 
 // (Private)
@@ -248,6 +257,9 @@ void Game::stealthRegeneration()
             // Add the Stealth.
             this->stealthRegenCur = stealthRegenStart * stealthRegenMultiplier;
             this->stealthPercentageCur += stealthRegenCur;
+
+            // Change Player Transparency
+            this->player->SetNewFillTransparency(stealthPercentageCur);
         }
         else
         {
@@ -263,7 +275,6 @@ void Game::stealthRegeneration()
         // Tick Time.
         this->stealthCooldownCur += 1.f;
     }
-
 }
 
 // (Private)
@@ -375,8 +386,11 @@ void Game::resetGame()
         hackingPointsCur = 0;
 
     // Reset Stealth Percentage If Necessary.
-    if (stealthPercentageCur != 100.f)
+    if (stealthPercentageCur != 100.f) 
+    {
         stealthPercentageCur = 100.f;
+        this->player->SetNewFillTransparency(stealthPercentageCur);
+    }
 
     // Start with Max Orbs.
     for (size_t i = 0; i < this->orbsMax; i++)
@@ -426,7 +440,7 @@ void Game::update()
                 i.update(this->window);
 
             // Update the Player.
-            this->player.update(this->window);
+            this->player->update(this->window);
 
             // Update Collision.
             this->updateCollision();
@@ -470,7 +484,7 @@ void Game::updateCollision()
         bool eraseOrbBool = false;
 
         // Check for Player & Orb Collision.
-        if (this->player.getShape().getGlobalBounds().intersects(
+        if (this->player->getShape().getGlobalBounds().intersects(
             this->orbs[i].getShape().getGlobalBounds()))
         {
             // Collect Hacking Points.
@@ -494,7 +508,7 @@ void Game::updateCollision()
         bool eraseEnemyBool = false;
 
         // Check for Player & Enemy Collision.
-        if (this->player.getShape().getGlobalBounds().intersects(
+        if (this->player->getShape().getGlobalBounds().intersects(
             this->enemies[i].getShape().getGlobalBounds()))
         {
             // Lose a Random Amount of Stealth.
@@ -520,9 +534,13 @@ void Game::updateCollision()
             this->enemies.erase(this->enemies.begin() + i);
     }
 
-    // Check Stealth Condition If Changed.
-    if (checkStealthCondition)
+    // Check Stealth Condition If Changed and apply correct feedback.
+    if (checkStealthCondition) 
+    {
         this->stealthConditionCheck();
+        this->player->SetNewFillTransparency(stealthPercentageCur);
+    }
+
 
     // Check Hacking Condition If Changed.
     if (checkHackingCondition)
@@ -595,7 +613,7 @@ void Game::render()
     this->renderPlayableAreaBorder(*this->window);
 
     // Draw Player.
-    this->player.render(this->window);
+    this->player->render(this->window);
 
     // Draw Orbs.
     for (auto& i : this->orbs)

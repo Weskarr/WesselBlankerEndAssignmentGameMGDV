@@ -72,7 +72,7 @@ void MathRigidbody::Update(float deltaTime)
     }
 
     // Add gravity force: m * g
-    MathVector2 gravityForce(0, mass * world->GetGravity()); // no need to multiply by deltaTime
+    MathVector2 gravityForce(0, mass * world->GetGravity());
     AddForce(gravityForce);
 
     // Apply friction: simple damping, using velocity directly (no timeStep needed here)

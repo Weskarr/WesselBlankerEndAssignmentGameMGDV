@@ -23,10 +23,9 @@
 // -------------------------------------------------------------------------------
 
 // (Public)
-Player::Player(float x, float y)
+Player::Player(float x, float y, World* world)
+	: rigidbody(world, MathVector2(x, y)), world(world)
 {
-	// Initialize this.
-	this->shape.setPosition(x, y);
 	this->initVariables();
 	this->initShape();
 }
@@ -49,16 +48,16 @@ Player::~Player()
 void Player::initVariables()
 {
 	// Set Movement Related Variables:
-	this->movementSpeed = 5.0f;
+	this->movementSpeed = 0.6f;
+	this->movementSpeedMax = 3.5f;
+	rigidbody.SetMass(1.0f);
 }
 
 // (Public)
 void Player::initShape()
 {
 	// Create the Player.
-	this->shape.setOutlineColor(sf::Color::Green);
 	this->shape.setOutlineThickness(-2.f);
-	this->shape.setFillColor(sf::Color(0, 255, 0, 100));
 	this->shape.setSize(sf::Vector2f(50.f, 50.f));
 }
 
@@ -73,6 +72,13 @@ const sf::RectangleShape Player::getShape() const
 	return this->shape;
 }
 
+// (Public)
+void Player::SetNewFillTransparency(float newTransparency) 
+{
+	this->shape.setFillColor(sf::Color(0, 255, 0, 5.0f + newTransparency));
+	this->shape.setOutlineColor(sf::Color(0, 255, 0, 50.0f + newTransparency));
+}
+
 // -------------------------------------------------------------------------------
 // UPDATING
 // -------------------------------------------------------------------------------
@@ -83,6 +89,9 @@ void Player::update(const sf::RenderTarget* target)
 	// Keyboard Input Update.
 	this->updateInput();
 
+	// Rigidbody Position Update.
+	this->updateRigidbodyPosition();
+
 	// Window Bounds Collision.
 	this->updateWindowBoundsCollision(target);
 }
@@ -90,57 +99,120 @@ void Player::update(const sf::RenderTarget* target)
 // (Private)
 void Player::updateInput()
 {
-	// Horizontal Axis:
-	// Move Left (Left Arrow or A).
+	MathVector2 velocity = rigidbody.GetVelocity();
+	float speed = movementSpeed * world->GetTimeStep(); // Adjust movement speed with time step
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		// Move the Player Shape Left.
-		this->shape.move(-this->movementSpeed, 0.f);
+		velocity.SetOnlyX(velocity.GetOnlyX() - speed);
+		if (velocity.GetOnlyX() < -movementSpeedMax)
+			velocity.SetOnlyX(-movementSpeedMax);
 	}
-	// Move Right (Right Arrow or D).
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		// Move the Player Shape Right.
-		this->shape.move(this->movementSpeed, 0.f);
+		velocity.SetOnlyX(velocity.GetOnlyX() + speed);
+		if (velocity.GetOnlyX() > movementSpeedMax)
+			velocity.SetOnlyX(movementSpeedMax);
+	}
+	else
+	{
+		velocity.SetOnlyX(velocity.GetOnlyX() * 0.9f); // Damping factor
 	}
 
-	// Vertical Axis:
-	// Move Up (Up Arrow or W).
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		// Move the Player Shape Up.
-		this->shape.move(0.f, -this->movementSpeed);
+		velocity.SetOnlyY(velocity.GetOnlyY() - speed);
+		if (velocity.GetOnlyY() < -movementSpeedMax)
+			velocity.SetOnlyY(-movementSpeedMax);
 	}
-	// Move Down (Down Arrow or S).
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		// Move the Player Shape Down.
-		this->shape.move(0.f, this->movementSpeed);
+		velocity.SetOnlyY(velocity.GetOnlyY() + speed);
+		if (velocity.GetOnlyY() > movementSpeedMax)
+			velocity.SetOnlyY(movementSpeedMax);
 	}
+	else
+	{
+		velocity.SetOnlyY(velocity.GetOnlyY() * 0.9f); // Damping factor
+	}
+
+
+
+
+
+	rigidbody.SetVelocity(velocity);
+}
+
+void Player::updateRigidbodyPosition() 
+{
+	if (!world) {
+		std::cerr << "Error: Player world is nullptr.\n";
+		return;
+	}
+
+	rigidbody.Update(world->GetTimeStep());
+
+	// Apply updated position to shape
+	MathVector2 pos = rigidbody.GetPosition();
+	this->shape.setPosition(pos.ToSFML());
 }
 
 // (Private)
 void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)
 {
+	MathVector2 velocity = rigidbody.GetVelocity();
+	MathVector2 correctionHorizontal = MathVector2(0,0);
+	MathVector2 correctionVertical = MathVector2(0,0);
+
 	// Left Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left <= 0.f)
-		this->shape.setPosition(0.f, this->shape.getGlobalBounds().top);
+	{
+		correctionHorizontal.SetMathVector2(MathVector2
+		(0.f, this->shape.getGlobalBounds().top));
+		velocity.SetOnlyX(0);
+	}
 
 	// Right Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x)
-		this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top);
+	{
+		correctionHorizontal.SetMathVector2(MathVector2
+		(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top));
+		velocity.SetOnlyX(0);
+	}
 
 	// Top Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().top <= 100.f)
-		this->shape.setPosition(this->shape.getGlobalBounds().left, 100.f);
+	{
+		correctionVertical.SetMathVector2(MathVector2
+		(this->shape.getGlobalBounds().left, 100.f));
+		velocity.SetOnlyY(0);
+	}
 
 	// Bottom Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().top + this->shape.getGlobalBounds().height >= target->getSize().y)
-		this->shape.setPosition(this->shape.getGlobalBounds().left, target->getSize().y - this->shape.getGlobalBounds().height);
+	{
+		correctionVertical.SetMathVector2(MathVector2
+		(this->shape.getGlobalBounds().left, target->getSize().y - this->shape.getGlobalBounds().height));
+		velocity.SetOnlyY(0);
+	}
+
+	if (correctionHorizontal.GetOnlyX() != 0 || correctionHorizontal.GetOnlyY() != 0)
+	{
+		this->shape.setPosition(correctionHorizontal.ToSFML());
+		this->rigidbody.SetPosition(correctionHorizontal);
+	}
+
+	if (correctionVertical.GetOnlyX() != 0 || correctionVertical.GetOnlyY() != 0)
+	{
+		this->shape.setPosition(correctionVertical.ToSFML());
+		this->rigidbody.SetPosition(correctionVertical);
+	}
+
+	rigidbody.SetVelocity(velocity);
 }
 
 // -------------------------------------------------------------------------------
