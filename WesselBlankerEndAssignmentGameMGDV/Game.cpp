@@ -6,58 +6,42 @@
     About: "This is kind of like my Game Master, with a few extras."
 */
 
-/*
-    Second Iteration Changes:
-    1.
-    2.
-    3.
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "Game.h"
 
+#pragma endregion
 
+// ======================= CONSTRUCTOR =========================
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
-// (Public)
+//
 Game::Game()
 {
     // Initialize this.
-    this->initVariables();
-    this->initWindow();
-    this->initFonts();
-    this->initText();
+    this->InitVariables();
+    this->InitWindow();
+    this->InitFonts();
+    this->InitText();
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-Game::~Game()
-{
-    // Delete this window.
-    delete this->player;
-    delete this->world;
-    delete this->window;
-}
+// ======================= INITIAL =========================
 
-// -------------------------------------------------------------------------------
-// INITIAL
-// -------------------------------------------------------------------------------
+#pragma region [Private]
 
-// (Private)
-void Game::initVariables()
+//
+void Game::InitVariables()
 {
     // Set the World if null:
     if (!this->world)
         this->world = new World();
 
     // Set Game Phases Related Variables:
-    resetPhases();
+    ResetPhases();
     this->startingPhase = true;
 
     // Set Main Related Variables:
@@ -95,12 +79,12 @@ void Game::initVariables()
     if (!this->player)
     {
         this->player = new Player(350.f, 400.f, this->world);
-        this->player->SetNewFillTransparency(stealthPercentageCur);
+        this->player->SetNewFillTransparency(0);
     }
 }
 
-// (Private)
-void Game::initWindow()
+// 
+void Game::InitWindow()
 {
     // Create the Window.
     this->videoMode.height = 700;
@@ -114,8 +98,8 @@ void Game::initWindow()
     this->playableAreaBorder.setFillColor(sf::Color(0, 255, 0, 50));
 }
 
-// (Private)
-void Game::initFonts()
+//
+void Game::InitFonts()
 {
     // Load the Font.
     if (!this->font.loadFromFile("Fonts/Roboto-Medium.ttf"))
@@ -125,8 +109,8 @@ void Game::initFonts()
     }
 }
 
-// (Private)
-void Game::initText()
+// 
+void Game::InitText()
 {
     // Status Text Setup.
     this->statusText.setFont(this->font);
@@ -147,33 +131,38 @@ void Game::initText()
     this->endText.setString("NONE");
 }
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-const bool Game::running() const
+// ======================= ACCESORS =========================
+
+#pragma region [Public]
+
+// 
+const bool Game::Running() const
 {
     // Returns the Window IsOpen Status.
-	return this->window->isOpen();
+    return this->window->isOpen();
 }
 
-// (Public)
-const bool Game::getEndGame() const
+// 
+const bool Game::GetEndGame() const
 {
     // Returns the Quit Game Status.
     return this->quitGame;
 }
 
-// -------------------------------------------------------------------------------
-// POLL-EVENTS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Private)
-void Game::pollEvents()
+// ======================= POLL-EVENTS =========================
+
+#pragma region [Private]
+
+// 
+void Game::PollEvents()
 {
     // Sort of Input Manager.
     while (this->window->pollEvent(this->ev)) {
+        
         //Polling loop to check for events.
         switch (this->ev.type)
         {
@@ -190,12 +179,14 @@ void Game::pollEvents()
     }
 }
 
-// -------------------------------------------------------------------------------
-// TIMED-EVENTS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Private)
-void Game::spawnOrbsTimer()
+// ======================= TIMED-EVENTS =========================
+
+#pragma region [Private]
+
+// 
+void Game::SpawnOrbsTimer()
 {
     // Only continue when not Max Orbs.
     if (this->orbs.size() < this->orbsMax)
@@ -217,8 +208,8 @@ void Game::spawnOrbsTimer()
     }
 }
 
-// (Private)
-void Game::spawnEnemyTimer()
+// 
+void Game::SpawnEnemyTimer()
 {
     // Only continue when not Max Enemies.
     if (this->enemies.size() < this->enemiesMax)
@@ -240,11 +231,11 @@ void Game::spawnEnemyTimer()
     }
 }
 
-// (Private)
-void Game::stealthRegeneration()
+// 
+void Game::StealthRegeneration()
 {
     // Await Cooldown Timer.
-    if (stealthCooldownCur >= stealthCooldownMax) 
+    if (stealthCooldownCur >= stealthCooldownMax)
     {
         if (this->stealthPercentageCur < 100.f)
         {
@@ -270,15 +261,15 @@ void Game::stealthRegeneration()
             this->stealthCooldownCur = 0.f;
         }
     }
-    else 
+    else
     {
         // Tick Time.
         this->stealthCooldownCur += 1.f;
     }
 }
 
-// (Private)
-void Game::randomStealthModifier(bool isPositive, int minP, int maxP)
+// 
+void Game::RandomStealthModifier(bool isPositive, int minP, int maxP)
 {
     // Generate a Random Value that is Subtracted from the Current Stealth.
     float randomValue = static_cast<float>(rand() % ((maxP * 100) - (minP * 100)) + minP * 100) / 100.f;
@@ -287,16 +278,16 @@ void Game::randomStealthModifier(bool isPositive, int minP, int maxP)
     std::cout << "RandomValue of " << minP << " and " << maxP << " is: " << randomValue << "\n";
 
     // Add or Subtract?
-    if (isPositive) 
+    if (isPositive)
     {
         // Add the Random Stealth Value.
         this->stealthPercentageCur += randomValue;
 
         // Make sure not to exceed Max.
-        if (this->stealthPercentageCur > 100.f) 
+        if (this->stealthPercentageCur > 100.f)
             this->stealthPercentageCur = 100.f;
     }
-    else 
+    else
     {
         // Subtract the Random Stealth Value.
         this->stealthPercentageCur -= randomValue;
@@ -308,23 +299,25 @@ void Game::randomStealthModifier(bool isPositive, int minP, int maxP)
     }
 }
 
-// (Private)
-void Game::randomHackingCollected()
+// 
+void Game::RandomHackingCollected()
 {
     // Generate a Random Value that is Collected.
     int randomValue = rand() % 1 + 3;
     this->hackingPointsCur += randomValue;
 
     // Also Generate a Random Value of Stealth that is Lost.
-    this->randomStealthModifier(false, 0, 1);
+    this->RandomStealthModifier(false, 0, 1);
 }
 
-// -------------------------------------------------------------------------------
-// CONDITIONS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Private)
-void Game::stealthConditionCheck()
+// ======================= CONDITIONS =========================
+
+#pragma region [Private]
+
+// 
+void Game::StealthConditionCheck()
 {
     if (this->stealthPercentageCur <= 0)
     {
@@ -335,13 +328,13 @@ void Game::stealthConditionCheck()
         std::cout << "[STATUS] End Game Condition Satisfied: " << "Kill Switch!";
 
         // Set Current Phase to Playing Phase.
-        this->resetPhases();
+        this->ResetPhases();
         this->endingPhase = true;
     }
 }
 
-// (Private)
-void Game::hackingConditionCheck()
+// 
+void Game::HackingConditionCheck()
 {
     if (this->hackingPointsCur >= hackingPointsMax)
     {
@@ -352,13 +345,13 @@ void Game::hackingConditionCheck()
         std::cout << "[STATUS] End Game Condition Satisfied: " << "All Data Hacked!";
 
         // Set Current Phase to Ending Phase.
-        this->resetPhases();
+        this->ResetPhases();
         this->endingPhase = true;
     }
 }
 
-// (Private)
-void Game::resetPhases()
+// 
+void Game::ResetPhases()
 {
     // Set all Phases False
     this->startingPhase = false;
@@ -366,8 +359,8 @@ void Game::resetPhases()
     this->endingPhase = false;
 }
 
-// (Private)
-void Game::resetGame()
+// 
+void Game::ResetGame()
 {
     // Reset End Conditions.
     killSwitch = false;
@@ -386,7 +379,7 @@ void Game::resetGame()
         hackingPointsCur = 0;
 
     // Reset Stealth Percentage If Necessary.
-    if (stealthPercentageCur != 100.f) 
+    if (stealthPercentageCur != 100.f)
     {
         stealthPercentageCur = 100.f;
         this->player->SetNewFillTransparency(stealthPercentageCur);
@@ -399,79 +392,86 @@ void Game::resetGame()
     }
 
     // Set Current Phase to Playing Phase.
-    this->resetPhases();
+    this->ResetPhases();
     this->playingPhase = true;
 }
 
-// -------------------------------------------------------------------------------
-// UPDATING
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-void Game::update()
+// ======================= UPDATING =========================
+
+#pragma region [Public]
+
+//
+void Game::Update()
 {
     // Checks for Poll-Events.
-    this->pollEvents();
+    this->PollEvents();
 
-    if (this->quitGame == false) 
+    // Check if Quiting Game.
+    if (this->quitGame == true)
+        return;
+
+    // Updates are Dependant on the Current Phase.
+    if (startingPhase)
     {
-        // Updates are Dependant on the Current Phase.
-        if (startingPhase) 
-        {
-            // Update the Start Phase Text.
-            this->updateStartPhaseText();
+        // Update the Start Phase Text.
+        this->UpdateStartPhaseText();
 
-            // Update the Possibility of Starting with Space Key.
-            this->updatePlayKey();
-        }
-        else if (playingPhase)
-        {
-            // Timed Stealth Regeneration.
-            this->stealthRegeneration();
+        // Update the Possibility of Starting with Space Key.
+        this->UpdatePlayKey();
+    }
+    else if (playingPhase)
+    {
+        // Timed Stealth Regeneration.
+        this->StealthRegeneration();
 
-            // Timed Enemy Spawner Update.
-            this->spawnEnemyTimer();
+        // Timed Enemy Spawner Update.
+        this->SpawnEnemyTimer();
 
-            // Timed Orb Spawner Update.
-            this->spawnOrbsTimer();
+        // Timed Orb Spawner Update.
+        this->SpawnOrbsTimer();
 
-            // Update Enemies.
-            for (auto& i : this->enemies)
-                i.update(this->window);
+        // Update Enemies.
+        for (auto& i : this->enemies)
+            i.Update(this->window);
 
-            // Update the Player.
-            this->player->update(this->window);
+        // Update the Player.
+        this->player->Update(this->window);
 
-            // Update Collision.
-            this->updateCollision();
+        // Update Collision.
+        this->UpdateCollision();
 
-            // Update the Text.
-            this->updateVariablesText();
-        }
-        else if (endingPhase) 
-        {
-            // Update the End Phase Text.
-            this->updateEndPhaseText();
+        // Update the Text.
+        this->UpdateVariablesText();
+    }
+    else if (endingPhase)
+    {
+        // Update the End Phase Text.
+        this->UpdateEndPhaseText();
 
-            // Update the Possibility of Restarting with Space Key.
-            this->updatePlayKey();
-        }
+        // Update the Possibility of Restarting with Space Key.
+        this->UpdatePlayKey();
     }
 }
 
-// (Private)
-void Game::updatePlayKey()
+#pragma endregion
+
+#pragma region [Private]
+
+// 
+void Game::UpdatePlayKey()
 {
     // If the Space Key is Pressed Continue.
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
         // Resets the Game & Sets Playing Phase True.
-        resetGame();
+        ResetGame();
     }
 }
 
-// (Private)
-void Game::updateCollision()
+// 
+void Game::UpdateCollision()
 {
     // For Condition Check Afterwards.
     bool checkStealthCondition = false;
@@ -485,10 +485,10 @@ void Game::updateCollision()
 
         // Check for Player & Orb Collision.
         if (this->player->getShape().getGlobalBounds().intersects(
-            this->orbs[i].getShape().getGlobalBounds()))
+            this->orbs[i].GetShape().getGlobalBounds()))
         {
             // Collect Hacking Points.
-            this->randomHackingCollected();
+            this->RandomHackingCollected();
 
             // Make sure to do a Condition Check Afterwards and Remove the Orb.
             checkStealthCondition = true;
@@ -509,20 +509,20 @@ void Game::updateCollision()
 
         // Check for Player & Enemy Collision.
         if (this->player->getShape().getGlobalBounds().intersects(
-            this->enemies[i].getShape().getGlobalBounds()))
+            this->enemies[i].GetShape().getGlobalBounds()))
         {
             // Lose a Random Amount of Stealth.
-            this->randomStealthModifier(false, 30, 50);
+            this->RandomStealthModifier(false, 30, 50);
 
             // Make sure to do a Condition Check Afterwards and Remove the Enemy.
             checkStealthCondition = true;
             eraseEnemyBool = true;
         }
         // Check if Hit Bottom.
-        else if (this->enemies[i].getHitBottom()) 
+        else if (this->enemies[i].GetHitBottom())
         {
             // Gain a Random Amount of Stealth.
-            this->randomStealthModifier(true, 2, 5);
+            this->RandomStealthModifier(true, 2, 5);
 
             // Make sure to do a Condition Check Afterwards and Remove the Enemy.
             checkStealthCondition = true;
@@ -535,20 +535,20 @@ void Game::updateCollision()
     }
 
     // Check Stealth Condition If Changed and apply correct feedback.
-    if (checkStealthCondition) 
+    if (checkStealthCondition)
     {
-        this->stealthConditionCheck();
+        this->StealthConditionCheck();
         this->player->SetNewFillTransparency(stealthPercentageCur);
     }
 
 
     // Check Hacking Condition If Changed.
     if (checkHackingCondition)
-        this->hackingConditionCheck();
+        this->HackingConditionCheck();
 }
 
-// (Private)
-void Game::updateVariablesText()
+// 
+void Game::UpdateVariablesText()
 {
     // Open String Stream.
     std::stringstream ss;
@@ -562,8 +562,8 @@ void Game::updateVariablesText()
     this->statusText.setString(ss.str());
 }
 
-// (Private)
-void Game::updateStartPhaseText()
+// 
+void Game::UpdateStartPhaseText()
 {
     // Open String Stream.
     std::stringstream ss;
@@ -575,14 +575,14 @@ void Game::updateStartPhaseText()
     this->startText.setString(ss.str());
 }
 
-// (Private)
-void Game::updateEndPhaseText()
+// 
+void Game::UpdateEndPhaseText()
 {
     // Open String Stream.
     std::stringstream ss;
 
     // if lost + reason.
-    if (killSwitch == true) 
+    if (killSwitch == true)
     {
         // Add String Information to the String Stream.
         ss << "[LOST] Kill Switch Shutdown!";
@@ -599,75 +599,83 @@ void Game::updateEndPhaseText()
     this->endText.setString(ss.str());
 }
 
-// -------------------------------------------------------------------------------
-// RENDERING
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-void Game::render()
+// ======================= RENDERING =========================
+
+#pragma region [Public]
+
+//
+void Game::Render()
 {
     // Clear the Window.
     this->window->clear(sf::Color(0, 20, 0));
-   
+
     // Draw Spawn Border.
-    this->renderPlayableAreaBorder(*this->window);
+    this->RenderPlayableAreaBorder(*this->window);
 
     // Draw Player.
-    this->player->render(this->window);
+    this->player->Render(this->window);
 
     // Draw Orbs.
     for (auto& i : this->orbs)
-        i.render(*this->window);
+        i.Render(*this->window);
 
     // Draw Enemies.
     for (auto& i : this->enemies)
-        i.render(*this->window);
+        i.Render(*this->window);
 
     // Render Depending on the Current Phase.
-    if (startingPhase) 
+    if (startingPhase)
     {
         // Draw Start Phase Text.
-        this->renderStartPhaseText(*this->window);
+        this->RenderStartPhaseText(*this->window);
     }
-    else if (playingPhase) 
+    else if (playingPhase)
     {
         // Draw Variables (Score & Health).
-        this->renderVariablesText(*this->window);
+        this->RenderVariablesText(*this->window);
     }
-    else if (endingPhase) 
+    else if (endingPhase)
     {
         // Draw End Phase Text.
-        this->renderEndPhaseText(*this->window);
+        this->RenderEndPhaseText(*this->window);
     }
 
     // Display All Renders.
     this->window->display();
 }
 
-// (Private)
-void Game::renderPlayableAreaBorder(sf::RenderTarget& target)
+#pragma endregion
+
+#pragma region [Private]
+
+// 
+void Game::RenderPlayableAreaBorder(sf::RenderTarget& target)
 {
     // Draw the Playable Area Border.
     target.draw(this->playableAreaBorder);
 }
 
-// (Private)
-void Game::renderVariablesText(sf::RenderTarget& target)
+// 
+void Game::RenderVariablesText(sf::RenderTarget& target)
 {
     // Draw the Status Text.
     target.draw(this->statusText);
 }
 
-// (Private)
-void Game::renderStartPhaseText(sf::RenderTarget& target)
+// 
+void Game::RenderStartPhaseText(sf::RenderTarget& target)
 {
     // Draw the Start Text.
     target.draw(this->startText);
 }
 
-// (Private)
-void Game::renderEndPhaseText(sf::RenderTarget& target)
+// 
+void Game::RenderEndPhaseText(sf::RenderTarget& target)
 {
     // Draw the End Text.
     target.draw(this->endText);
 }
+
+#pragma endregion

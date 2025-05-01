@@ -6,19 +6,18 @@
     About: "This is the Main Source File that drives the Game (Master)."
 */
 
-/*
-    Second Iteration Changes:
-    1.
-    2.
-    3.
-*/
+#pragma region included Files
 
 // Included Header Files:
 #include "Game.h"
 
+#pragma endregion
 
+// ======================= Main =========================
 
-// Main:
+#pragma region [Private]
+
+// Drives the Application.
 int main()
 {
     // Enable Debug Incase of Memory Leaks.
@@ -31,15 +30,29 @@ int main()
     Game game;
 
     // Game Loop.
-    while(game.running() && !game.getEndGame()) 
+    while (game.Running() && !game.GetEndGame())
     {
         // Update the Game (Master).
-        game.update();
+        game.Update();
 
         // Render the Game (Master).
-        game.render();
+        game.Render();
     }
 
     // End of Application.
-    return 0; 
+    return 0;
 }
+
+#pragma endregion
+
+
+
+
+
+#pragma region [Public]
+
+#pragma endregion
+
+#pragma region [Private]
+
+#pragma endregion

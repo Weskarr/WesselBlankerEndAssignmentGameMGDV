@@ -6,45 +6,32 @@
 	About: "This is a collectable Data Orb that is hackable by the Player."
 */
 
-/*
-	Second Iteration Changes:
-	1.
-	2.
-	3.
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "Orb.h"
 
+#pragma endregion
 
+// ======================= CONSTRUCTOR =========================
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
 Orb::Orb(sf::RenderWindow& window)
 {
 	// Initialize this.
-	this->initShape(window);
+	this->InitShape(window);
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-Orb::~Orb()
-{
-	// Empty for now..
-}
+// ======================= INITIAL =========================
 
-// -------------------------------------------------------------------------------
-// INITIAL
-// -------------------------------------------------------------------------------
+#pragma region [Private]
 
 // (Private)
-void Orb::initShape(sf::RenderWindow& window)
+void Orb::InitShape(sf::RenderWindow& window)
 {
 	// Create the Orb
 	this->shape.setRadius(static_cast<float>(rand() % 5 + 10));
@@ -56,12 +43,12 @@ void Orb::initShape(sf::RenderWindow& window)
 	float shapePosY = static_cast<float>(rand() % window.getSize().y - this->shape.getGlobalBounds().height);
 
 	// Check if Out-Of-Bounds and correct if Necessary.
-	if (shapePosX < 0.f) 
+	if (shapePosX < 0.f)
 	{
 		// Set X-Position 0.
 		shapePosX = 0.f;
 	}
-	if (shapePosY < 100.f) 
+	if (shapePosY < 100.f)
 	{
 		// Move Y-Position Down.
 		shapePosY += 200.f;
@@ -71,24 +58,30 @@ void Orb::initShape(sf::RenderWindow& window)
 	this->shape.setPosition(sf::Vector2f(shapePosX, shapePosY));
 }
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= ACCESORS =========================
+
+#pragma region [Public]
 
 // (Public)
-const sf::CircleShape Orb::getShape() const
+const sf::CircleShape Orb::GetShape() const
 {
 	// Returns the Orb Shape.
 	return this->shape;
 }
 
-// -------------------------------------------------------------------------------
-// RENDERING
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= RENDERING =========================
+
+#pragma region [Public]
 
 // (Public)
-void Orb::render(sf::RenderTarget& target)
+void Orb::Render(sf::RenderTarget& target)
 {
 	// Draws the Orb Shape.
 	target.draw(this->shape);
 }
+
+#pragma endregion

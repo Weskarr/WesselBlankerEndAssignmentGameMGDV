@@ -43,15 +43,12 @@ public:
         MathVector2 acceleration = MathVector2(0, 0),
         float mass = 1.0f);
 
-    // Destructor Functions (Public):
-    virtual ~MathRigidbody();
-
     // Accessor Functions (Public):
     void AddForce(const MathVector2& force);
     void Print() const;
 
     // Updating Functions (Private):
-    void Update(float deltaTime);
+    void Update();
 
     // Setter Functions (Public):
     void SetPosition(const MathVector2& newPosition);

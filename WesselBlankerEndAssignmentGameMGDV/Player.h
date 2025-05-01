@@ -6,6 +6,8 @@
 	About: "This is the Player itself, that dodges Enemies and collects hackable Data Orbs."
 */
 
+#pragma region included Libraries & Files
+
 // Single Safety:
 #pragma once
 
@@ -14,6 +16,8 @@
 
 // Included Header Files:
 #include "MathRigidbody.h"
+
+#pragma endregion
 
 // Class:
 class Player
@@ -32,30 +36,27 @@ private:
 	float movementSpeedMax;
 
 	// Initial Functions (Private):
-	void initVariables();
-	void initShape();
+	void InitVariables();
+	void InitShape();
 
 	// Updating Functions (Private):
-	void updateInput();
-	void updateRigidbodyPosition();
-	void updateWindowBoundsCollision(const sf::RenderTarget* target);
+	void UpdateInput();
+	void UpdateRigidbodyPosition();
+	void UpdateWindowBoundsCollision(const sf::RenderTarget* target);
 
 public:
 
 	// Constructor Functions (Public):
 	Player(float x, float y, World* world);
 
-	// Destructor Functions (Public):
-	virtual ~Player();
-
 	// Accessors Functions (Public):
 	const sf::RectangleShape getShape() const;
 	void SetNewFillTransparency(float newTransparency);
 
 	// Updating Functions (Public):
-	void update(const sf::RenderTarget* target);
+	void Update(const sf::RenderTarget* target);
 
 	// Rendering Functions (Public):
-	void render(sf::RenderTarget* target);
+	void Render(sf::RenderTarget* target);
 };
 

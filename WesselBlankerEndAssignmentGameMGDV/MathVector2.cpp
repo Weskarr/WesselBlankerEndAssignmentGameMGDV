@@ -6,74 +6,63 @@
 	About: "This is my custom Vector2 class."
 */
 
-/*
-	Second Iteration Changes:
-	1. Completely New!
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "MathVector2.h"
 
+#pragma endregion
 
+// ======================= CONSTRUCTORS =========================
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTORS
-// -------------------------------------------------------------------------------
-
-// (Public) [CUSTOM]
-MathVector2::MathVector2(float x, float y) : x(x), y(y) {}
-
-// -------------------------------------------------------------------------------
-// DESTRUCTORS
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
-MathVector2::~MathVector2()
-{
-	// Empty for now..
-}
+MathVector2::MathVector2(float x, float y) : x(x), y(y) {}
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= ACCESORS =========================
+
+#pragma region [Public]
 
 // (Public) 
-MathVector2 MathVector2::operator+(const MathVector2& other) const 
+MathVector2 MathVector2::operator+(const MathVector2& other) const
 {
 	// Addition to CustomVector2.
 	return MathVector2(x + other.x, y + other.y);
 }
 
 // (Public) 
-MathVector2 MathVector2::operator-(const MathVector2& other) const 
+MathVector2 MathVector2::operator-(const MathVector2& other) const
 {
 	// Subtraction to CustomVector2.
 	return MathVector2(x - other.x, y - other.y);
 }
 
 // (Public) 
-MathVector2 MathVector2::operator*(float scalar) const 
+MathVector2 MathVector2::operator*(float scalar) const
 {
 	// Scalar Multiplication to CustomVector2.
 	return MathVector2(x * scalar, y * scalar);
 }
 
 // (Public) 
-MathVector2 MathVector2::operator/(float scalar) const 
+MathVector2 MathVector2::operator/(float scalar) const
 {
 	// Scalar Division to CustomVector2.
 	return MathVector2(x / scalar, y / scalar);
 }
 
 // (Public)
-float MathVector2::Magnitude() const 
+float MathVector2::Magnitude() const
 {
 	// Magnitude of the CustomVector2.
 	return std::sqrt(x * x + y * y);
 }
 
 // (Public) 
-MathVector2 MathVector2::Normalized() const 
+MathVector2 MathVector2::Normalized() const
 {
 	// Normalize the CustomVector2 (convert it to unit length).
 	float mag = Magnitude();
@@ -81,7 +70,7 @@ MathVector2 MathVector2::Normalized() const
 }
 
 // (Public) 
-void MathVector2::Print() const 
+void MathVector2::Print() const
 {
 	// Print the CustomVector2 for debugging.
 	std::cout << "CustomVector2(" << x << ", " << y << ")\n";
@@ -91,9 +80,11 @@ sf::Vector2f MathVector2::ToSFML() const {
 	return sf::Vector2f(x, y);
 }
 
-// -------------------------------------------------------------------------------
-// SETTERS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= SETTERS =========================
+
+#pragma region [Public]
 
 // (Public)
 void MathVector2::SetMathVector2(const MathVector2& newMathVector2)
@@ -111,9 +102,11 @@ void MathVector2::SetOnlyY(float newY)
 	y = newY;
 }
 
-// -------------------------------------------------------------------------------
-// GETTERS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= GETTERS =========================
+
+#pragma region [Public]
 
 // (Public)
 MathVector2 MathVector2::GetMathVector2() const
@@ -122,10 +115,12 @@ MathVector2 MathVector2::GetMathVector2() const
 }
 
 float MathVector2::GetOnlyX() const
-{ 
-	return x; 
+{
+	return x;
 }
 float MathVector2::GetOnlyY() const
-{ 
-	return y; 
+{
+	return y;
 }
+
+#pragma endregion

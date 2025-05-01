@@ -6,6 +6,8 @@
 	About: "Is a Enemy that acts like some kind of Anti-Virus, attempting to stop the Player."
 */
 
+#pragma region included Libraries & Files
+
 // Single Safety:
 #pragma once
 
@@ -17,6 +19,8 @@
 
 // Included Header Files:
 #include "MathRigidbody.h"
+
+#pragma endregion
 
 // Class:
 class Enemy
@@ -34,28 +38,28 @@ private:
 	bool hitBottom;
 
 	// Initial Functions (Private):
-	void initVariables();
-	void initShape(sf::RenderWindow& window);
+	void InitVariables();
+	void InitShape(sf::RenderWindow& window);
 
 	// Updating Functions (Private):
-	void updateMovement();
-	void updateWindowBoundsCollision(const sf::RenderTarget* target);
+	void UpdateMovement();
+	void UpdateWindowBoundsCollision(const sf::RenderTarget* target);
+
+	// Rendering Functions (Private)
+	void RenderShape(sf::RenderTarget& target);
 
 public:
 
 	// Constructor Functions (Public):
 	Enemy(sf::RenderWindow& window, World* world);
 
-	// Destructor Functions (Public):
-	virtual ~Enemy();
-
 	// Accessors Functions (Public):
-	const sf::CircleShape getShape() const;
-	const bool getHitBottom() const;
+	const sf::CircleShape GetShape() const;
+	const bool GetHitBottom() const;
 
 	// Updating Functions (Public):
-	void update(const sf::RenderTarget* target);
+	void Update(const sf::RenderTarget* target);
 
 	// Rendering Functions (Public):
-	void render(sf::RenderTarget& target);
+	void Render(sf::RenderTarget& target);
 };

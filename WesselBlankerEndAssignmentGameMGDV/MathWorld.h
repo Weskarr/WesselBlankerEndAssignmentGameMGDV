@@ -31,9 +31,6 @@ public:
     // Constructor Functions (Public):
     World(float friction = 1.0f / 1500.0f, float gravity = 9.8f * 0, float timeStep = 1.0f * 1.5f);
 
-    // Destructor Functions (Public):
-    virtual ~World();
-
     // Setter Functions (Public):
     void SetFriction(float newFriction);
     void SetGravity(float newGravity);

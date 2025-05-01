@@ -6,46 +6,41 @@
 	About: "This is the Player itself, that dodges Enemies and collects hackable Data Orbs."	
 */
 
-/*
-	Second Iteration Changes:
-	1.
-	2.
-	3.
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "Player.h"
 
+#pragma endregion
 
+#pragma region [Public]
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+#pragma region [Private]
+
+#pragma endregion
+
+// ======================= CONSTRUCTOR =========================
+
+#pragma region [Public]
 
 // (Public)
 Player::Player(float x, float y, World* world)
 	: rigidbody(world, MathVector2(x, y)), world(world)
 {
-	this->initVariables();
-	this->initShape();
+	this->InitVariables();
+	this->InitShape();
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= INITIAL =========================
+
+#pragma region [Public]
 
 // (Public)
-Player::~Player()
-{
-	// Empty for now..
-}
-
-// -------------------------------------------------------------------------------
-// INITIAL
-// -------------------------------------------------------------------------------
-
-// (Public)
-void Player::initVariables()
+void Player::InitVariables()
 {
 	// Set Movement Related Variables:
 	this->movementSpeed = 0.6f;
@@ -54,16 +49,19 @@ void Player::initVariables()
 }
 
 // (Public)
-void Player::initShape()
+void Player::InitShape()
 {
 	// Create the Player.
 	this->shape.setOutlineThickness(-2.f);
 	this->shape.setSize(sf::Vector2f(50.f, 50.f));
 }
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+
+// ======================= ACCESORS =========================
+
+#pragma region [Public]
 
 // (Public)
 const sf::RectangleShape Player::getShape() const
@@ -73,34 +71,40 @@ const sf::RectangleShape Player::getShape() const
 }
 
 // (Public)
-void Player::SetNewFillTransparency(float newTransparency) 
+void Player::SetNewFillTransparency(float newTransparency)
 {
-	this->shape.setFillColor(sf::Color(0, 255, 0, 5.0f + newTransparency));
-	this->shape.setOutlineColor(sf::Color(0, 255, 0, 50.0f + newTransparency));
+	this->shape.setFillColor(sf::Color(0, 255, 0, 5 + static_cast<sf::Uint8>(newTransparency)));
+	this->shape.setOutlineColor(sf::Color(0, 255, 0, 50 + static_cast<sf::Uint8>(newTransparency)));
 }
 
-// -------------------------------------------------------------------------------
-// UPDATING
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= UPDATING =========================
+
+#pragma region [Public]
 
 // (Public)
-void Player::update(const sf::RenderTarget* target)
+void Player::Update(const sf::RenderTarget* target)
 {
 	// Keyboard Input Update.
-	this->updateInput();
+	this->UpdateInput();
 
 	// Rigidbody Position Update.
-	this->updateRigidbodyPosition();
+	this->UpdateRigidbodyPosition();
 
 	// Window Bounds Collision.
-	this->updateWindowBoundsCollision(target);
+	this->UpdateWindowBoundsCollision(target);
 }
 
+#pragma endregion
+
+#pragma region [Private]
+
 // (Private)
-void Player::updateInput()
+void Player::UpdateInput()
 {
 	MathVector2 velocity = rigidbody.GetVelocity();
-	float speed = movementSpeed * world->GetTimeStep(); // Adjust movement speed with time step
+	float speed = movementSpeed;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -140,21 +144,18 @@ void Player::updateInput()
 		velocity.SetOnlyY(velocity.GetOnlyY() * 0.9f); // Damping factor
 	}
 
-
-
-
-
 	rigidbody.SetVelocity(velocity);
 }
 
-void Player::updateRigidbodyPosition() 
+//
+void Player::UpdateRigidbodyPosition()
 {
 	if (!world) {
 		std::cerr << "Error: Player world is nullptr.\n";
 		return;
 	}
 
-	rigidbody.Update(world->GetTimeStep());
+	rigidbody.Update();
 
 	// Apply updated position to shape
 	MathVector2 pos = rigidbody.GetPosition();
@@ -162,16 +163,15 @@ void Player::updateRigidbodyPosition()
 }
 
 // (Private)
-void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)
+void Player::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 {
 	MathVector2 velocity = rigidbody.GetVelocity();
-	MathVector2 correctionHorizontal = MathVector2(0,0);
-	MathVector2 correctionVertical = MathVector2(0,0);
+	MathVector2 correction = MathVector2(0, 0);
 
 	// Left Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left <= 0.f)
 	{
-		correctionHorizontal.SetMathVector2(MathVector2
+		correction.SetMathVector2(MathVector2
 		(0.f, this->shape.getGlobalBounds().top));
 		velocity.SetOnlyX(0);
 	}
@@ -179,7 +179,7 @@ void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	// Right Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x)
 	{
-		correctionHorizontal.SetMathVector2(MathVector2
+		correction.SetMathVector2(MathVector2
 		(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top));
 		velocity.SetOnlyX(0);
 	}
@@ -187,7 +187,7 @@ void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	// Top Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().top <= 100.f)
 	{
-		correctionVertical.SetMathVector2(MathVector2
+		correction.SetMathVector2(MathVector2
 		(this->shape.getGlobalBounds().left, 100.f));
 		velocity.SetOnlyY(0);
 	}
@@ -195,33 +195,31 @@ void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	// Bottom Side Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().top + this->shape.getGlobalBounds().height >= target->getSize().y)
 	{
-		correctionVertical.SetMathVector2(MathVector2
+		correction.SetMathVector2(MathVector2
 		(this->shape.getGlobalBounds().left, target->getSize().y - this->shape.getGlobalBounds().height));
 		velocity.SetOnlyY(0);
 	}
 
-	if (correctionHorizontal.GetOnlyX() != 0 || correctionHorizontal.GetOnlyY() != 0)
+	if (correction.GetOnlyX() != 0 || correction.GetOnlyY() != 0)
 	{
-		this->shape.setPosition(correctionHorizontal.ToSFML());
-		this->rigidbody.SetPosition(correctionHorizontal);
-	}
-
-	if (correctionVertical.GetOnlyX() != 0 || correctionVertical.GetOnlyY() != 0)
-	{
-		this->shape.setPosition(correctionVertical.ToSFML());
-		this->rigidbody.SetPosition(correctionVertical);
+		this->shape.setPosition(correction.ToSFML());
+		this->rigidbody.SetPosition(correction);
 	}
 
 	rigidbody.SetVelocity(velocity);
 }
 
-// -------------------------------------------------------------------------------
-// RENDERING
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= RENDERING =========================
+
+#pragma region [Public]
 
 // (Public)
-void Player::render(sf::RenderTarget* target)
+void Player::Render(sf::RenderTarget* target)
 {
 	// Draw the Player Shape.
 	target->draw(this->shape);
 }
+
+#pragma endregion

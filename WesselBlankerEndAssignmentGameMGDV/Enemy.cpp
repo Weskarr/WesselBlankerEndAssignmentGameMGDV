@@ -6,46 +6,35 @@
 	About: "Is a Enemy that acts like some kind of Anti-Virus, randomly attempting to stop the Player."
 */
 
-/*
-	Second Iteration Changes:
-	1.
-	2.
-	3.
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "Enemy.h"
 
+#pragma endregion
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTOR
-// -------------------------------------------------------------------------------
+// ======================= CONSTRUCTOR =========================
 
-// (Public)
+#pragma region [Public]
+
+// Constructs this Enemy.
 Enemy::Enemy(sf::RenderWindow& window, World* world)
 	: rigidbody(world), world(world)
 {
 	// Initialize this.
-	this->initShape(window);
-	this->initVariables();
+	this->InitShape(window);
+	this->InitVariables();
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTOR
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-Enemy::~Enemy()
-{
-	// Empty for now..
-}
 
-// -------------------------------------------------------------------------------
-// INITIAL
-// -------------------------------------------------------------------------------
+// ======================= INITIAL =========================
 
-// (Private)
-void Enemy::initVariables()
+#pragma region [Private]
+
+// Initializes the Variables.
+void Enemy::InitVariables()
 {
 	// Set Movement Related Variables:
 	this->hitBottom = false;
@@ -55,16 +44,15 @@ void Enemy::initVariables()
 	float velY = static_cast<float>(rand() % 100 + 75) / 100;
 	rigidbody.SetVelocity(MathVector2(velX, velY));
 	rigidbody.SetPosition(MathVector2(this->shape.getPosition().x, this->shape.getPosition().y));
-	//rigidbody.SetPosition(MathVector2(220, 220));
 	rigidbody.SetMass(1.0f);
 }
 
-// (Private)
-void Enemy::initShape(sf::RenderWindow& window)
+// Initializes the Shape Variables.
+void Enemy::InitShape(sf::RenderWindow& window)
 {
 	// Create the Enemy.
 	this->shape.setFillColor(sf::Color::Transparent);
-	this->shape.setOutlineColor(sf::Color(255,50,50));
+	this->shape.setOutlineColor(sf::Color(255, 50, 50));
 	this->shape.setOutlineThickness(-2.f);
 	this->shape.setRadius(static_cast<float>(rand() % 16 + 45));
 
@@ -73,9 +61,9 @@ void Enemy::initShape(sf::RenderWindow& window)
 
 	// Set Y-Position just above Global Bounds.
 	float shapePosY = -this->shape.getGlobalBounds().height;
-	
+
 	// Check if Out-Of-Bounds and correct if Necessary.
-	if (shapePosX < 0.f) 
+	if (shapePosX < 0.f)
 	{
 		// Set X-Position 0.
 		shapePosX = 0.f;
@@ -85,53 +73,61 @@ void Enemy::initShape(sf::RenderWindow& window)
 	this->shape.setPosition(sf::Vector2f(shapePosX, shapePosY));
 }
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-const sf::CircleShape Enemy::getShape() const
+// ======================= ACCESORS =========================
+
+#pragma region [Public]
+
+// Returns this Shape.
+const sf::CircleShape Enemy::GetShape() const
 {
 	// Returns the Enemy Shape.
 	return this->shape;
 }
 
-// (Public)
-const bool Enemy::getHitBottom() const
+// Returns this HitBottom Status.
+const bool Enemy::GetHitBottom() const
 {
 	// Returns the Hit Bottom Status.
 	return this->hitBottom;
 }
 
-// -------------------------------------------------------------------------------
-// UPDATING
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-void Enemy::update(const sf::RenderTarget* target)
+// ======================= UPDATING =========================
+
+#pragma region [Public]
+
+// Controls the Update Order.
+void Enemy::Update(const sf::RenderTarget* target)
 {
 	//Movement Update.
-	updateMovement();
+	UpdateMovement();
 
 	//Window Bounds Collision.
-	updateWindowBoundsCollision(target);
+	UpdateWindowBoundsCollision(target);
 }
 
-// (Private)
-void Enemy::updateMovement()
+#pragma endregion
+
+#pragma region [Private]
+
+// Updates Movement
+void Enemy::UpdateMovement()
 {
-	rigidbody.Update(world->GetTimeStep());
+	rigidbody.Update();
 
 	// Apply updated position to shape
 	MathVector2 pos = rigidbody.GetPosition();
 	this->shape.setPosition(pos.ToSFML());
 }
 
-// (Private)
-void Enemy::updateWindowBoundsCollision(const sf::RenderTarget* target)
+// Updates Out-Of-Bounds Corrections
+void Enemy::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 {
 	// Left Side Bounce & Out-Of-Bounds Correction if Necessary.
-	if (this->shape.getGlobalBounds().left <= 0.f) 
+	if (this->shape.getGlobalBounds().left <= 0.f)
 	{
 		//this->velocity.x *= -1;
 		MathVector2 velocity = rigidbody.GetVelocity();
@@ -141,7 +137,7 @@ void Enemy::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	}
 
 	// Right Side Bounce & Out-Of-Bounds Correction if Necessary.
-	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x) 
+	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x)
 	{
 		//this->velocity.x *= -1;
 		MathVector2 velocity = rigidbody.GetVelocity();
@@ -160,13 +156,28 @@ void Enemy::updateWindowBoundsCollision(const sf::RenderTarget* target)
 	}
 }
 
-// -------------------------------------------------------------------------------
-// RENDERING
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-void Enemy::render(sf::RenderTarget& target)
+// ======================= RENDERING =========================
+
+#pragma region [Public]
+
+// Controls the Render Order.
+void Enemy::Render(sf::RenderTarget& target)
+{
+	// Draw Shape.
+	RenderShape(target);
+}
+
+#pragma endregion
+
+#pragma region [Private]
+
+//
+void Enemy::RenderShape(sf::RenderTarget& target)
 {
 	// Draw the Enemy Shape.
 	target.draw(this->shape);
 }
+
+#pragma endregion

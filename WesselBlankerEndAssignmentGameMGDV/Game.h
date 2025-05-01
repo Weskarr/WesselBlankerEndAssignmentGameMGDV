@@ -6,6 +6,8 @@
 	About: "This is kind of like my Game Master, with a few extras."
 */
 
+#pragma region included Libraries & Files
+
 // Single Safety:
 #pragma once
 
@@ -19,7 +21,7 @@
 #include "Orb.h"
 #include "MathWorld.h"
 
-
+#pragma endregion
 
 // Class:
 class Game
@@ -82,55 +84,52 @@ private:
 	Player* player;
 
 	// Initial Functions (Private):
-	void initVariables();
-	void initWindow();
-	void initFonts();
-	void initText();
+	void InitVariables();
+	void InitWindow();
+	void InitFonts();
+	void InitText();
 
 	// Poll-Events Functions (Private):
-	void pollEvents();
+	void PollEvents();
 
 	// Timed-Events Functions (Private):
-	void spawnOrbsTimer();
-	void spawnEnemyTimer();
-	void stealthRegeneration();
-	void randomStealthModifier(bool isPositive, int minP, int maxP);
-	void randomHackingCollected();
+	void SpawnOrbsTimer();
+	void SpawnEnemyTimer();
+	void StealthRegeneration();
+	void RandomStealthModifier(bool isPositive, int minP, int maxP);
+	void RandomHackingCollected();
 
 	// Conditions Functions (Private):
-	void stealthConditionCheck();
-	void hackingConditionCheck();
-	void resetPhases();
-	void resetGame();
+	void StealthConditionCheck();
+	void HackingConditionCheck();
+	void ResetPhases();
+	void ResetGame();
 
 	// Updating Functions (Private):
-	void updatePlayKey();
-	void updateCollision();
-	void updateVariablesText();
-	void updateStartPhaseText();
-	void updateEndPhaseText();
+	void UpdatePlayKey();
+	void UpdateCollision();
+	void UpdateVariablesText();
+	void UpdateStartPhaseText();
+	void UpdateEndPhaseText();
 
 	// Rendering Functions (Private):
-	void renderPlayableAreaBorder(sf::RenderTarget& target);
-	void renderVariablesText(sf::RenderTarget& target);
-	void renderStartPhaseText(sf::RenderTarget& target);
-	void renderEndPhaseText(sf::RenderTarget& target);
+	void RenderPlayableAreaBorder(sf::RenderTarget& target);
+	void RenderVariablesText(sf::RenderTarget& target);
+	void RenderStartPhaseText(sf::RenderTarget& target);
+	void RenderEndPhaseText(sf::RenderTarget& target);
 
 public:
 
 	// Constructor Functions (Public):
 	Game();
 
-	// Destructor Functions (Public):
-	virtual ~Game();
-
 	// Accessors Functions (Public):
-	const bool running() const;
-	const bool getEndGame() const;
+	const bool Running() const;
+	const bool GetEndGame() const;
 
 	// Updating Functions (Public):
-	void update();
+	void Update();
 
 	// Rendering Functions (Public):
-	void render();
+	void Render();
 };

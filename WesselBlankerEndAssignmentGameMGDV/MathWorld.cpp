@@ -6,76 +6,56 @@
 	About: "This is for holding world variables."
 */
 
-/*
-	Second Iteration Changes:
-	1. Completely New!
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "MathWorld.h"
 
+#pragma endregion
 
+// ======================= CONSTRUCTORS =========================
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTORS
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
 World::World(float friction, float gravity, float timeStep)
 	: friction(friction), gravity(gravity), timeStep(timeStep) {
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTORS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-// (Public)
-World::~World()
-{
-	// Empty for now..
-}
+// ======================= SETTERS =========================
 
-// -------------------------------------------------------------------------------
-// SETTERS
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
 void World::SetFriction(float newFriction)
-{
-	friction = newFriction;
-}
+{ friction = newFriction; }
 
 // (Public)
 void World::SetGravity(float newGravity)
-{
-	gravity = newGravity;
-}
+{ gravity = newGravity; }
 
 // (Public)
 void World::SetTimeStep(float newTimeStep)
-{
-	timeStep = newTimeStep;
-}
+{ timeStep = newTimeStep; }
 
-// -------------------------------------------------------------------------------
-// GETTERS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= GETTERS =========================
+
+#pragma region [Public]
 
 // (Public)
-float World::GetFriction() const
-{
-	return friction;
-}
+float World::GetFriction() const 
+{ return friction; }
 
 // (Public) 
-float World::GetGravity() const
-{
-	return gravity;
-}
+float World::GetGravity() const 
+{ return gravity; }
 
 // (Public)
-float World::GetTimeStep() const
-{
-	return timeStep;
-}
+float World::GetTimeStep() const 
+{ return timeStep; }
 
+#pragma endregion

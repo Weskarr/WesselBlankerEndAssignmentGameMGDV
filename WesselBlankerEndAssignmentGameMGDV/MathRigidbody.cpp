@@ -6,19 +6,16 @@
 	About: "This is my custom Rigidbody class."
 */
 
-/*
-	Second Iteration Changes:
-    1. Completely New!
-*/
+#pragma region included Files
 
 // Included Header File:
 #include "MathRigidbody.h"
 
+#pragma endregion
 
+// ======================= CONSTRUCTORS =========================
 
-// -------------------------------------------------------------------------------
-// CONSTRUCTORS
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
 MathRigidbody::MathRigidbody(World* world,
@@ -29,18 +26,11 @@ MathRigidbody::MathRigidbody(World* world,
     : world(world), position(position), velocity(velocity), acceleration(acceleration), mass(mass) {
 }
 
-// -------------------------------------------------------------------------------
-// DESTRUCTORS
-// -------------------------------------------------------------------------------
+#pragma endregion
 
-MathRigidbody::~MathRigidbody()
-{
-    // Empty for now..
-}
+// ======================= ACCESORS =========================
 
-// -------------------------------------------------------------------------------
-// ACCESORS
-// -------------------------------------------------------------------------------
+#pragma region [Public]
 
 // (Public)
 void MathRigidbody::AddForce(const MathVector2& force) {
@@ -59,12 +49,14 @@ void MathRigidbody::Print() const
     velocity.Print();
 }
 
-// -------------------------------------------------------------------------------
-// UPDATING
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= UPDATING =========================
+
+#pragma region [Private]
 
 // (Private)
-void MathRigidbody::Update(float deltaTime) 
+void MathRigidbody::Update()
 {
     if (!world) {
         std::cerr << "Error: Rigidbody world is nullptr.\n";
@@ -79,18 +71,20 @@ void MathRigidbody::Update(float deltaTime)
     velocity = velocity * (1.0f - world->GetFriction());
 
     // Update velocity based on acceleration (using the time step already passed)
-    velocity = velocity + (acceleration * deltaTime);
+    velocity = velocity + (acceleration * world->GetTimeStep());
 
     // Update position based on velocity (using deltaTime for proper integration)
-    position = position + (velocity * deltaTime);
+    position = position + (velocity * world->GetTimeStep());
 
     // Reset acceleration after each update
     acceleration = MathVector2(0, 0);
 }
 
-// -------------------------------------------------------------------------------
-// SETTERS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= SETTERS =========================
+
+#pragma region [Public]
 
 // (Public)
 void MathRigidbody::SetPosition(const MathVector2& newPosition)
@@ -116,9 +110,11 @@ void MathRigidbody::SetMass(float newMass)
     mass = newMass;
 }
 
-// -------------------------------------------------------------------------------
-// GETTERS
-// -------------------------------------------------------------------------------
+#pragma endregion
+
+// ======================= GETTERS =========================
+
+#pragma region [Public]
 
 // (Public)
 MathVector2 MathRigidbody::GetPosition() const
@@ -143,3 +139,5 @@ float MathRigidbody::GetMass() const
 {
     return mass;
 }
+
+#pragma endregion

@@ -34,9 +34,6 @@ public:
     // Constructor Functions (Public):
     MathVector2(float x, float y);
 
-    // Destructor Functions (Public):
-    virtual ~MathVector2();
-
     // Accessor Functions (Public):
     MathVector2 operator+(const MathVector2& other) const;
     MathVector2 operator-(const MathVector2& other) const;
