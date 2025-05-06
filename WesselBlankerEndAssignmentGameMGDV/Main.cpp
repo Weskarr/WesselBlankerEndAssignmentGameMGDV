@@ -44,15 +44,3 @@ int main()
 }
 
 #pragma endregion
-
-
-
-
-
-#pragma region [Public]
-
-#pragma endregion
-
-#pragma region [Private]
-
-#pragma endregion

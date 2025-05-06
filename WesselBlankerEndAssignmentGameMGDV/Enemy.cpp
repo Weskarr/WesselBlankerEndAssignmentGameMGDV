@@ -28,12 +28,11 @@ Enemy::Enemy(sf::RenderWindow& window, World* world)
 
 #pragma endregion
 
-
 // ======================= INITIAL =========================
 
 #pragma region [Private]
 
-// Initializes the Variables.
+// Is the Main Initialization Function.
 void Enemy::InitVariables()
 {
 	// Set Movement Related Variables:
@@ -47,7 +46,7 @@ void Enemy::InitVariables()
 	rigidbody.SetMass(1.0f);
 }
 
-// Initializes the Shape Variables.
+// Initializes the Shape.
 void Enemy::InitShape(sf::RenderWindow& window)
 {
 	// Create the Enemy.
@@ -99,7 +98,7 @@ const bool Enemy::GetHitBottom() const
 
 #pragma region [Public]
 
-// Controls the Update Order.
+// Is the Main Update Function.
 void Enemy::Update(const sf::RenderTarget* target)
 {
 	//Movement Update.
@@ -113,9 +112,10 @@ void Enemy::Update(const sf::RenderTarget* target)
 
 #pragma region [Private]
 
-// Updates Movement
+// Updates Movement.
 void Enemy::UpdateMovement()
 {
+	// Tell Rigidbody to Update.
 	rigidbody.Update();
 
 	// Apply updated position to shape
@@ -123,13 +123,12 @@ void Enemy::UpdateMovement()
 	this->shape.setPosition(pos.ToSFML());
 }
 
-// Updates Out-Of-Bounds Corrections
+// Updates Out-Of-Bounds Corrections.
 void Enemy::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 {
 	// Left Side Bounce & Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left <= 0.f)
 	{
-		//this->velocity.x *= -1;
 		MathVector2 velocity = rigidbody.GetVelocity();
 		MathVector2 newVelocity(-velocity.GetMathVector2().GetOnlyX(), velocity.GetMathVector2().GetOnlyY());
 		rigidbody.SetVelocity(newVelocity);
@@ -139,7 +138,6 @@ void Enemy::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 	// Right Side Bounce & Out-Of-Bounds Correction if Necessary.
 	if (this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x)
 	{
-		//this->velocity.x *= -1;
 		MathVector2 velocity = rigidbody.GetVelocity();
 		MathVector2 newVelocity(-velocity.GetMathVector2().GetOnlyX(), velocity.GetMathVector2().GetOnlyY());
 		rigidbody.SetVelocity(newVelocity);
@@ -162,10 +160,10 @@ void Enemy::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 
 #pragma region [Public]
 
-// Controls the Render Order.
+// Is the Main Render Function.
 void Enemy::Render(sf::RenderTarget& target)
 {
-	// Draw Shape.
+	// Draw Player Shape.
 	RenderShape(target);
 }
 
@@ -173,11 +171,8 @@ void Enemy::Render(sf::RenderTarget& target)
 
 #pragma region [Private]
 
-//
+// Renders the Shape.
 void Enemy::RenderShape(sf::RenderTarget& target)
-{
-	// Draw the Enemy Shape.
-	target.draw(this->shape);
-}
+{ target.draw(this->shape); }
 
 #pragma endregion

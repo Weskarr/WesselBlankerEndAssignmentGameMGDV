@@ -13,19 +13,11 @@
 
 #pragma endregion
 
-#pragma region [Public]
-
-#pragma endregion
-
-#pragma region [Private]
-
-#pragma endregion
-
 // ======================= CONSTRUCTOR =========================
 
 #pragma region [Public]
 
-// (Public)
+// Constructs this Player.
 Player::Player(float x, float y, World* world)
 	: rigidbody(world, MathVector2(x, y)), world(world)
 {
@@ -39,7 +31,7 @@ Player::Player(float x, float y, World* world)
 
 #pragma region [Public]
 
-// (Public)
+// Initializes Start Variables.
 void Player::InitVariables()
 {
 	// Set Movement Related Variables:
@@ -48,7 +40,7 @@ void Player::InitVariables()
 	rigidbody.SetMass(1.0f);
 }
 
-// (Public)
+// Initializes Player Shape.
 void Player::InitShape()
 {
 	// Create the Player.
@@ -63,14 +55,11 @@ void Player::InitShape()
 
 #pragma region [Public]
 
-// (Public)
+// Gets the Player Shape.
 const sf::RectangleShape Player::getShape() const
-{
-	// Returns the Player Shape.
-	return this->shape;
-}
+{ return this->shape; }
 
-// (Public)
+// Changes the Player Shape Color Transparency.
 void Player::SetNewFillTransparency(float newTransparency)
 {
 	this->shape.setFillColor(sf::Color(0, 255, 0, 5 + static_cast<sf::Uint8>(newTransparency)));
@@ -83,7 +72,7 @@ void Player::SetNewFillTransparency(float newTransparency)
 
 #pragma region [Public]
 
-// (Public)
+// Is the Main Update Function.
 void Player::Update(const sf::RenderTarget* target)
 {
 	// Keyboard Input Update.
@@ -100,7 +89,7 @@ void Player::Update(const sf::RenderTarget* target)
 
 #pragma region [Private]
 
-// (Private)
+// Player Movement.
 void Player::UpdateInput()
 {
 	MathVector2 velocity = rigidbody.GetVelocity();
@@ -147,9 +136,10 @@ void Player::UpdateInput()
 	rigidbody.SetVelocity(velocity);
 }
 
-//
+// Updates the Rigidbody Physics.
 void Player::UpdateRigidbodyPosition()
 {
+	// Safety Check.
 	if (!world) {
 		std::cerr << "Error: Player world is nullptr.\n";
 		return;
@@ -162,7 +152,7 @@ void Player::UpdateRigidbodyPosition()
 	this->shape.setPosition(pos.ToSFML());
 }
 
-// (Private)
+// Checks for Window Bounds Collisions.
 void Player::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 {
 	MathVector2 velocity = rigidbody.GetVelocity();
@@ -215,11 +205,8 @@ void Player::UpdateWindowBoundsCollision(const sf::RenderTarget* target)
 
 #pragma region [Public]
 
-// (Public)
+// Renders the Player Shape.
 void Player::Render(sf::RenderTarget* target)
-{
-	// Draw the Player Shape.
-	target->draw(this->shape);
-}
+{ target->draw(this->shape); }
 
 #pragma endregion

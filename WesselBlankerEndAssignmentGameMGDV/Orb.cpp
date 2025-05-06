@@ -17,7 +17,7 @@
 
 #pragma region [Public]
 
-// (Public)
+// Constructs this Orb.
 Orb::Orb(sf::RenderWindow& window)
 {
 	// Initialize this.
@@ -30,7 +30,7 @@ Orb::Orb(sf::RenderWindow& window)
 
 #pragma region [Private]
 
-// (Private)
+// Itializes the Orb Shape.
 void Orb::InitShape(sf::RenderWindow& window)
 {
 	// Create the Orb
@@ -64,12 +64,9 @@ void Orb::InitShape(sf::RenderWindow& window)
 
 #pragma region [Public]
 
-// (Public)
+// Gets the Orb Shape.
 const sf::CircleShape Orb::GetShape() const
-{
-	// Returns the Orb Shape.
-	return this->shape;
-}
+{ return this->shape; }
 
 #pragma endregion
 
@@ -77,11 +74,8 @@ const sf::CircleShape Orb::GetShape() const
 
 #pragma region [Public]
 
-// (Public)
+// Renders the Orb.
 void Orb::Render(sf::RenderTarget& target)
-{
-	// Draws the Orb Shape.
-	target.draw(this->shape);
-}
+{ target.draw(this->shape); }
 
 #pragma endregion

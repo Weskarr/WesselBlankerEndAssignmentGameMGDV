@@ -17,7 +17,7 @@
 
 #pragma region [Public]
 
-// (Public)
+// Constructs this MathRigidbody.
 MathRigidbody::MathRigidbody(World* world,
     MathVector2 position,
     MathVector2 velocity,
@@ -32,17 +32,15 @@ MathRigidbody::MathRigidbody(World* world,
 
 #pragma region [Public]
 
-// (Public)
-void MathRigidbody::AddForce(const MathVector2& force) {
-    // Apply a force to the Rigidbody (change in acceleration)
-    // Formula: F = ma, so acceleration = force / mass
+// Applies force to the Rigidbody.
+void MathRigidbody::AddForce(const MathVector2& force) 
+{
     acceleration = force / mass;
 }
 
-// (Public)
+// Debug Prints the Position and Velocity.
 void MathRigidbody::Print() const
 {
-    // For debugging, print the position and velocity
     std::cout << "Position: ";
     position.Print();
     std::cout << "Velocity: ";
@@ -55,28 +53,29 @@ void MathRigidbody::Print() const
 
 #pragma region [Private]
 
-// (Private)
+// Is the Main Update Function.
 void MathRigidbody::Update()
 {
-    if (!world) {
-        std::cerr << "Error: Rigidbody world is nullptr.\n";
+    // Quick safety check..
+    if (!world) 
+    {
+        std::cerr << "Error: MathRigidbody world is null!\n";
         return;
     }
 
-    // Add gravity force: m * g
-    MathVector2 gravityForce(0, mass * world->GetGravity());
-    AddForce(gravityForce);
+    // Update Gravity Force.
+    AddForce(MathVector2(0, mass * world->GetGravity()));
 
-    // Apply friction: simple damping, using velocity directly (no timeStep needed here)
+    // Update Friction.
     velocity = velocity * (1.0f - world->GetFriction());
 
-    // Update velocity based on acceleration (using the time step already passed)
+    // Update Velocity based on Acceleration.
     velocity = velocity + (acceleration * world->GetTimeStep());
 
-    // Update position based on velocity (using deltaTime for proper integration)
+    // Update Position based on Velocity.
     position = position + (velocity * world->GetTimeStep());
 
-    // Reset acceleration after each update
+    // Reset Acceleration.
     acceleration = MathVector2(0, 0);
 }
 
@@ -86,25 +85,25 @@ void MathRigidbody::Update()
 
 #pragma region [Public]
 
-// (Public)
+// Sets a given Position MathVector2.
 void MathRigidbody::SetPosition(const MathVector2& newPosition)
 {
     position = newPosition;
 }
 
-// (Public)
+// Sets a given Velocity MathVector2.
 void MathRigidbody::SetVelocity(const MathVector2& newVelocity)
 {
     velocity = newVelocity;
 }
 
-// (Public)
+// Sets a given Acceleration MathVector2.
 void MathRigidbody::SetAcceleration(const MathVector2& newAcceleration)
 {
     acceleration = newAcceleration;
 }
 
-// (Public)
+// Sets a given Mass Value.
 void MathRigidbody::SetMass(float newMass)
 {
     mass = newMass;
@@ -116,25 +115,25 @@ void MathRigidbody::SetMass(float newMass)
 
 #pragma region [Public]
 
-// (Public)
+// Gets the Position MathVector2.
 MathVector2 MathRigidbody::GetPosition() const
 {
     return position;
 }
 
-// (Public)
+// Gets the Velocity MathVector2.
 MathVector2 MathRigidbody::GetVelocity() const
 {
     return velocity;
 }
 
-// (Public)
+// Gets the Acceleration MathVector2.
 MathVector2 MathRigidbody::GetAcceleration() const
 {
     return acceleration;
 }
 
-// (Public)
+// Gets the Mass Value.
 float MathRigidbody::GetMass() const
 {
     return mass;

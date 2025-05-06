@@ -3,13 +3,10 @@
 	File Type: "Header"
 	Made by: "Wessel Blanker"
 	Started on: "30-04-2025"
-	About: "This is my custom Vector2 class."
+	About: "This is my Custom Vector2 Class."
 */
 
-/*
-    Second Iteration Changes:
-    1. Completely New!
-*/
+#pragma region included Libraries & Files
 
 // Single Safety:
 #pragma once
@@ -19,7 +16,7 @@
 #include <iostream>
 #include <SFML/System/Vector2.hpp>
 
-
+#pragma endregion
 
 // Class:
 class MathVector2

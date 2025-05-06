@@ -17,7 +17,7 @@
 
 #pragma region [Public]
 
-//
+// Constructs this Game.
 Game::Game()
 {
     // Initialize this.
@@ -33,7 +33,7 @@ Game::Game()
 
 #pragma region [Private]
 
-//
+// Initializes the Start Variables.
 void Game::InitVariables()
 {
     // Set the World if null:
@@ -83,7 +83,7 @@ void Game::InitVariables()
     }
 }
 
-// 
+// Initializes the Game Window.
 void Game::InitWindow()
 {
     // Create the Window.
@@ -98,7 +98,7 @@ void Game::InitWindow()
     this->playableAreaBorder.setFillColor(sf::Color(0, 255, 0, 50));
 }
 
-//
+// Initializes the Fonts.
 void Game::InitFonts()
 {
     // Load the Font.
@@ -109,7 +109,7 @@ void Game::InitFonts()
     }
 }
 
-// 
+// Initializes the Texts.
 void Game::InitText()
 {
     // Status Text Setup.
@@ -137,19 +137,13 @@ void Game::InitText()
 
 #pragma region [Public]
 
-// 
+// Is the Game Window Open?
 const bool Game::Running() const
-{
-    // Returns the Window IsOpen Status.
-    return this->window->isOpen();
-}
+{ return this->window->isOpen(); }
 
-// 
+// Has the Game been Quited?
 const bool Game::GetEndGame() const
-{
-    // Returns the Quit Game Status.
-    return this->quitGame;
-}
+{ return this->quitGame; }
 
 #pragma endregion
 
@@ -157,7 +151,7 @@ const bool Game::GetEndGame() const
 
 #pragma region [Private]
 
-// 
+// Manages the Game Window.
 void Game::PollEvents()
 {
     // Sort of Input Manager.
@@ -185,7 +179,7 @@ void Game::PollEvents()
 
 #pragma region [Private]
 
-// 
+// Spawns Orbs if allowed.
 void Game::SpawnOrbsTimer()
 {
     // Only continue when not Max Orbs.
@@ -208,7 +202,7 @@ void Game::SpawnOrbsTimer()
     }
 }
 
-// 
+// Spawns Enemies if allowed.
 void Game::SpawnEnemyTimer()
 {
     // Only continue when not Max Enemies.
@@ -231,7 +225,7 @@ void Game::SpawnEnemyTimer()
     }
 }
 
-// 
+// Regenerates Stealth if allowed.
 void Game::StealthRegeneration()
 {
     // Await Cooldown Timer.
@@ -268,7 +262,7 @@ void Game::StealthRegeneration()
     }
 }
 
-// 
+// Generates and Applies Custom Stealth Value.
 void Game::RandomStealthModifier(bool isPositive, int minP, int maxP)
 {
     // Generate a Random Value that is Subtracted from the Current Stealth.
@@ -299,7 +293,7 @@ void Game::RandomStealthModifier(bool isPositive, int minP, int maxP)
     }
 }
 
-// 
+// Generates and Applies Custom Hacking Points.
 void Game::RandomHackingCollected()
 {
     // Generate a Random Value that is Collected.
@@ -316,7 +310,7 @@ void Game::RandomHackingCollected()
 
 #pragma region [Private]
 
-// 
+// Checks the Stealth Condition.
 void Game::StealthConditionCheck()
 {
     if (this->stealthPercentageCur <= 0)
@@ -333,7 +327,7 @@ void Game::StealthConditionCheck()
     }
 }
 
-// 
+// Checks the Hacking Condition.
 void Game::HackingConditionCheck()
 {
     if (this->hackingPointsCur >= hackingPointsMax)
@@ -350,7 +344,7 @@ void Game::HackingConditionCheck()
     }
 }
 
-// 
+// Resets the Phases.
 void Game::ResetPhases()
 {
     // Set all Phases False
@@ -359,7 +353,7 @@ void Game::ResetPhases()
     this->endingPhase = false;
 }
 
-// 
+// Resets the Game
 void Game::ResetGame()
 {
     // Reset End Conditions.
@@ -402,7 +396,7 @@ void Game::ResetGame()
 
 #pragma region [Public]
 
-//
+// Is the Main Update Function.
 void Game::Update()
 {
     // Checks for Poll-Events.
@@ -459,7 +453,7 @@ void Game::Update()
 
 #pragma region [Private]
 
-// 
+// Starts the actual Game on Space.
 void Game::UpdatePlayKey()
 {
     // If the Space Key is Pressed Continue.
@@ -470,7 +464,7 @@ void Game::UpdatePlayKey()
     }
 }
 
-// 
+// Does all the Collision Logic.
 void Game::UpdateCollision()
 {
     // For Condition Check Afterwards.
@@ -547,7 +541,7 @@ void Game::UpdateCollision()
         this->HackingConditionCheck();
 }
 
-// 
+// Updates the Data Hacked and Stealth Text.
 void Game::UpdateVariablesText()
 {
     // Open String Stream.
@@ -562,7 +556,7 @@ void Game::UpdateVariablesText()
     this->statusText.setString(ss.str());
 }
 
-// 
+// Updates the Press Space To Start Text.
 void Game::UpdateStartPhaseText()
 {
     // Open String Stream.
@@ -575,7 +569,7 @@ void Game::UpdateStartPhaseText()
     this->startText.setString(ss.str());
 }
 
-// 
+// Updates the Correct End Phase Texts.
 void Game::UpdateEndPhaseText()
 {
     // Open String Stream.
@@ -605,7 +599,7 @@ void Game::UpdateEndPhaseText()
 
 #pragma region [Public]
 
-//
+// Is the Main Render Function.
 void Game::Render()
 {
     // Clear the Window.
@@ -650,32 +644,20 @@ void Game::Render()
 
 #pragma region [Private]
 
-// 
+// Renders the Playable Area Border.
 void Game::RenderPlayableAreaBorder(sf::RenderTarget& target)
-{
-    // Draw the Playable Area Border.
-    target.draw(this->playableAreaBorder);
-}
+{ target.draw(this->playableAreaBorder); }
 
-// 
+// Renders the Data Hacked and Stealth Text. 
 void Game::RenderVariablesText(sf::RenderTarget& target)
-{
-    // Draw the Status Text.
-    target.draw(this->statusText);
-}
+{ target.draw(this->statusText); }
 
-// 
+// Renders the Press Space To Start Text.
 void Game::RenderStartPhaseText(sf::RenderTarget& target)
-{
-    // Draw the Start Text.
-    target.draw(this->startText);
-}
+{ target.draw(this->startText); }
 
-// 
+// Renders the Correct End Phase Texts.
 void Game::RenderEndPhaseText(sf::RenderTarget& target)
-{
-    // Draw the End Text.
-    target.draw(this->endText);
-}
+{ target.draw(this->endText); }
 
 #pragma endregion

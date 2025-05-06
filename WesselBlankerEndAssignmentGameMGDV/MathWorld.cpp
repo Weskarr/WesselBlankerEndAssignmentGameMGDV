@@ -17,7 +17,7 @@
 
 #pragma region [Public]
 
-// (Public)
+// Constructs this World.
 World::World(float friction, float gravity, float timeStep)
 	: friction(friction), gravity(gravity), timeStep(timeStep) {
 }
@@ -28,15 +28,15 @@ World::World(float friction, float gravity, float timeStep)
 
 #pragma region [Public]
 
-// (Public)
+// Sets a given Friction Value.
 void World::SetFriction(float newFriction)
 { friction = newFriction; }
 
-// (Public)
+// Sets a given Gravity Value.
 void World::SetGravity(float newGravity)
 { gravity = newGravity; }
 
-// (Public)
+// Sets a given TimeStep Value.
 void World::SetTimeStep(float newTimeStep)
 { timeStep = newTimeStep; }
 
@@ -46,15 +46,15 @@ void World::SetTimeStep(float newTimeStep)
 
 #pragma region [Public]
 
-// (Public)
+// Gets the Friction Value.
 float World::GetFriction() const 
 { return friction; }
 
-// (Public) 
+// Gets the Gravity Value.
 float World::GetGravity() const 
 { return gravity; }
 
-// (Public)
+// Gets the TimeStep Value.
 float World::GetTimeStep() const 
 { return timeStep; }
 

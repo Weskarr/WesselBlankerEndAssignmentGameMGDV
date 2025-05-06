@@ -17,7 +17,7 @@
 
 #pragma region [Public]
 
-// (Public)
+// Constructs this MathVector2.
 MathVector2::MathVector2(float x, float y) : x(x), y(y) {}
 
 #pragma endregion
@@ -26,57 +26,52 @@ MathVector2::MathVector2(float x, float y) : x(x), y(y) {}
 
 #pragma region [Public]
 
-// (Public) 
+// Operator for MathVector2 Additions (Vector + Vector).
 MathVector2 MathVector2::operator+(const MathVector2& other) const
 {
-	// Addition to CustomVector2.
 	return MathVector2(x + other.x, y + other.y);
 }
 
-// (Public) 
+// Operator for MathVector2 Subtractions (Vector - Vector).
 MathVector2 MathVector2::operator-(const MathVector2& other) const
 {
-	// Subtraction to CustomVector2.
 	return MathVector2(x - other.x, y - other.y);
 }
 
-// (Public) 
+// Operator for MathVector2 Multiplications (Vector * Scalar).
 MathVector2 MathVector2::operator*(float scalar) const
 {
-	// Scalar Multiplication to CustomVector2.
 	return MathVector2(x * scalar, y * scalar);
 }
 
-// (Public) 
+// Operator for MathVector2 Divisions (Vector / Scalar).
 MathVector2 MathVector2::operator/(float scalar) const
 {
-	// Scalar Division to CustomVector2.
 	return MathVector2(x / scalar, y / scalar);
 }
 
-// (Public)
+// Calculates and Gets a Magnitude Value.
 float MathVector2::Magnitude() const
 {
-	// Magnitude of the CustomVector2.
 	return std::sqrt(x * x + y * y);
 }
 
-// (Public) 
+// Calculates and Gets a Normalized Value.
 MathVector2 MathVector2::Normalized() const
 {
-	// Normalize the CustomVector2 (convert it to unit length).
 	float mag = Magnitude();
 	return (mag > 0) ? *this / mag : MathVector2(0, 0);
 }
 
-// (Public) 
+// Debug Prints the CustomVector2.
 void MathVector2::Print() const
 {
-	// Print the CustomVector2 for debugging.
 	std::cout << "CustomVector2(" << x << ", " << y << ")\n";
 }
 
-sf::Vector2f MathVector2::ToSFML() const {
+// Converts MathVector2 to SFML Vector.
+sf::Vector2f MathVector2::ToSFML() const 
+{
 	return sf::Vector2f(x, y);
 }
 
@@ -86,21 +81,17 @@ sf::Vector2f MathVector2::ToSFML() const {
 
 #pragma region [Public]
 
-// (Public)
+// Sets given values for this MathVector2.
 void MathVector2::SetMathVector2(const MathVector2& newMathVector2)
-{
-	x = newMathVector2.x;
-	y = newMathVector2.y;
-}
+{ x = newMathVector2.x; y = newMathVector2.y; }
 
+// Sets a given Only X Value of this MathVector2.
 void MathVector2::SetOnlyX(float newX)
-{
-	x = newX;
-}
+{ x = newX; }
+
+// Sets a given Only Y Value of this MathVector2.
 void MathVector2::SetOnlyY(float newY)
-{
-	y = newY;
-}
+{ y = newY; }
 
 #pragma endregion
 
@@ -108,19 +99,16 @@ void MathVector2::SetOnlyY(float newY)
 
 #pragma region [Public]
 
-// (Public)
+// Gets the Full MathVector2.
 MathVector2 MathVector2::GetMathVector2() const
-{
-	return MathVector2(x, y);
-}
+{ return MathVector2(x, y); }
 
+// Gets the Only X Value of this MathVector2.
 float MathVector2::GetOnlyX() const
-{
-	return x;
-}
+{ return x; }
+
+// Gets the Only Y Value of this MathVector2.
 float MathVector2::GetOnlyY() const
-{
-	return y;
-}
+{ return y; }
 
 #pragma endregion

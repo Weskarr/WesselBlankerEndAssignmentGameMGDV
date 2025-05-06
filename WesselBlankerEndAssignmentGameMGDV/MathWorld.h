@@ -3,18 +3,15 @@
     File Type: "Header"
     Made by: "Wessel Blanker"
     Started on: "30-04-2025"
-    About: "This is for holding world variables."
+    About: "This is for holding World Based Variables."
 */
 
-/*
-    Second Iteration Changes:
-    1. Completely New!
-*/
+#pragma region included Libraries & Files
 
 // Single Safety:
 #pragma once
 
-
+#pragma endregion
 
 // Class:
 class World 

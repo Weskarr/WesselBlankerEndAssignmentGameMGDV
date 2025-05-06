@@ -3,13 +3,10 @@
 	File Type: "Header"
 	Made by: "Wessel Blanker"
 	Started on: "30-04-2025"
-	About: "This is my custom Rigidbody class."
+	About: "This is my Custom Rigidbody Class."
 */
 
-/*
-    Second Iteration Changes:
-    1. Completely New!
-*/
+#pragma region included Libraries & Files
 
 // Single Safety:
 #pragma once
@@ -18,7 +15,7 @@
 #include "MathVector2.h"
 #include "MathWorld.h"
 
-
+#pragma endregion
 
 // Class:
 class MathRigidbody
@@ -47,7 +44,7 @@ public:
     void AddForce(const MathVector2& force);
     void Print() const;
 
-    // Updating Functions (Private):
+    // Updating Functions (Public):
     void Update();
 
     // Setter Functions (Public):
